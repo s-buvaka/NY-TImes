@@ -29,7 +29,6 @@ public class NewsListActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
         news = DataUtils.generateNews();
         newsRecycler = findViewById(R.id.news_recycler_view);
         layoutManager = new LinearLayoutManager(this);
