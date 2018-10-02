@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String MY_MAIL = "buvaka.sergey89@gmail.com";
     private static final String MY_WEB = "https://hh.ru/applicant/resumes/view?resume=38b9e174ff05bed6f30039ed1f634e4b473539";
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_about);
 
         initVar();
         varSetClickableAndFocusable();

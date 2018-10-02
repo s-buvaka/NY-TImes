@@ -4,35 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    tools:context=".AboutActivity">
 
 
     <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="40"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="35"
         android:background="@drawable/yellow_background">
 
         <ImageView
             android:id="@+id/my_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@id/my_name"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/my_name"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/my_photo" />
 
         <TextView
             android:id="@+id/my_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginStart="@dimen/indentation"
+            android:layout_marginTop="@dimen/indentation"
             android:fontFamily="serif"
             android:text="@string/my_name"
             android:textColor="@color/colorBlack"
-            android:textSize="@dimen/name_scale" />
+            android:textSize="@dimen/name_text_size" />
 
         <TextView
             android:id="@+id/my_position"
@@ -40,11 +41,11 @@
             android:layout_height="wrap_content"
             android:layout_alignStart="@id/my_name"
             android:layout_below="@id/my_name"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginTop="@dimen/indentation"
             android:fontFamily="sans-serif-smallcaps"
             android:text="@string/my_position"
             android:textColor="@color/colorBlack"
-            android:textSize="@dimen/defaultTextSize" />
+            android:textSize="@dimen/position_text_size" />
 
         <ImageView
             android:id="@+id/phone_icon"
@@ -52,7 +53,7 @@
             android:layout_height="22dp"
             android:layout_alignStart="@id/my_position"
             android:layout_below="@id/my_position"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginTop="@dimen/indentation"
             app:srcCompat="@drawable/phone" />
 
         <TextView
@@ -60,13 +61,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/my_position"
-            android:layout_marginStart="@dimen/min_margin"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginStart="@dimen/about_activity_margin"
+            android:layout_marginTop="@dimen/indentation"
             android:layout_toEndOf="@id/phone_icon"
             android:fontFamily="sans-serif-smallcaps"
             android:text="@string/my_phone_number"
             android:textColor="@color/colorBlack"
-            android:textSize="@dimen/defaultTextSize" />
+            android:textSize="@dimen/position_text_size" />
 
         <ImageView
             android:id="@+id/qr_code"
@@ -74,7 +75,7 @@
             android:layout_height="46dp"
             android:layout_alignStart="@id/phone_icon"
             android:layout_below="@id/phone_icon"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginTop="@dimen/indentation"
             app:srcCompat="@drawable/qr_code" />
 
         <ImageView
@@ -82,20 +83,20 @@
             android:layout_width="85dp"
             android:layout_height="46dp"
             android:layout_alignBottom="@+id/qr_code"
+            android:layout_marginStart="@dimen/about_activity_margin"
             android:layout_toEndOf="@+id/qr_code"
-            android:layout_marginStart="@dimen/min_margin"
-            app:srcCompat="@drawable/hh_logo"/>
+            app:srcCompat="@drawable/hh_logo" />
 
     </RelativeLayout>
 
-
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="60"
+        android:id="@+id/bottom_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="65"
         android:background="@drawable/dark_background"
         android:orientation="vertical"
-        android:padding="@dimen/default_margin">
+        android:padding="@dimen/indentation">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -116,18 +117,17 @@
             </LinearLayout>
         </ScrollView>
 
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/min_margin"
+            android:layout_marginTop="@dimen/about_activity_margin"
             android:background="@color/colorYellow" />
 
         <EditText
-            android:id="@+id/message"
+            android:id="@+id/message_enter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginTop="@dimen/indentation"
             android:ems="10"
             android:hint="@string/hint"
             android:inputType="textPersonName"
@@ -136,9 +136,9 @@
             android:textColorHint="@color/colorGrey" />
 
         <View
-            android:layout_width="295dp"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/min_margin"
+            android:layout_marginTop="@dimen/about_activity_margin"
             android:background="@color/colorYellow" />
 
         <Button
@@ -146,8 +146,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginBottom="@dimen/default_margin"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/indentation"
+            android:layout_marginTop="@dimen/indentation"
             android:background="@android:color/transparent"
             android:text="@string/button_text"
             android:textColor="@color/colorGrey" />
@@ -165,7 +165,6 @@
                 android:id="@+id/instagram_logo"
                 android:layout_width="@dimen/icon_dim"
                 android:layout_height="@dimen/icon_dim"
-                android:layout_marginStart="@dimen/max_margin"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/instagram_logo" />
 
@@ -180,7 +179,6 @@
                 android:id="@+id/facebook_logo"
                 android:layout_width="@dimen/icon_dim"
                 android:layout_height="@dimen/icon_dim"
-                android:layout_marginEnd="@dimen/max_margin"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/facebook_logo" />
         </LinearLayout>

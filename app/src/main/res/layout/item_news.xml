@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/item_height">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/item_photo"
+            android:layout_width="@dimen/item_image_scale"
+            android:layout_height="@dimen/item_image_scale"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/item_margin"
+            android:scaleType="fitCenter"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="@dimen/item_margin"
+            android:layout_marginTop="@dimen/item_margin"
+            android:layout_toStartOf="@id/item_photo"
+            android:textAllCaps="true"
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/item_title_text_size"
+            tools:text="Darwin award" />
+
+        <TextView
+            android:id="@+id/item_preview_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/item_title"
+            android:layout_marginStart="@dimen/item_margin"
+            android:layout_marginTop="@dimen/item_margin"
+            android:layout_toStartOf="@id/item_photo"
+            android:maxLines="5"
+            android:textColor="@color/colorBlack"
+            tools:text="Tourist filmed sitting on 5m-long crocodile
+It was dangerous, I know. It is a scary
+feeling siting on something that could
+kill you in  a fraction of a second, he says" />
+
+        <TextView
+            android:id="@+id/item_published_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="@dimen/item_margin"
+            android:layout_marginStart="@dimen/item_margin"
+            tools:text="4 hr. ago, 10:34 AM" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

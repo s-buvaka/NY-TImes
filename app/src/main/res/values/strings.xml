@@ -13,4 +13,5 @@
 </string>
     <string name="hint">Enter a message</string>
     <string name="button_text">Send Message</string>
+    <string name="menu_title">About me</string>
 </resources>
