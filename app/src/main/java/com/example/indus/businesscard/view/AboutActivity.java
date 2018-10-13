@@ -35,7 +35,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_about);
 
         initView();
-        varSetClickableAndFocusable();
+        viewSetFocusable();
         setClickListeners();
         addDisclaimer();
     }
@@ -74,16 +74,11 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         facebookLogo = findViewById(R.id.facebook_logo);
     }
 
-    private void varSetClickableAndFocusable() {
-        myPhoneNumber.setClickable(true);
+    private void viewSetFocusable() {
         myPhoneNumber.setFocusable(true);
-        myResumeWebLink.setClickable(true);
         myResumeWebLink.setFocusable(true);
-        instagramLogo.setClickable(true);
         instagramLogo.setFocusable(true);
-        whatsAppLogo.setClickable(true);
         whatsAppLogo.setFocusable(true);
-        facebookLogo.setClickable(true);
         facebookLogo.setFocusable(true);
 
 
