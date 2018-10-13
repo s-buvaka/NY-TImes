@@ -1,14 +1,18 @@
-package com.example.indus.businesscard;
+package com.example.indus.businesscard.view;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.indus.businesscard.R;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -30,9 +34,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-        initVar();
+        initView();
         varSetClickableAndFocusable();
         setClickListeners();
+        addDisclaimer();
     }
 
     @Override
@@ -59,7 +64,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void initVar() {
+    private void initView() {
         myPhoneNumber = findViewById(R.id.my_phone_number);
         myResumeWebLink = findViewById(R.id.my_web_link);
         messageEnter = findViewById(R.id.message_enter);
@@ -131,5 +136,13 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         intent.setType("text/plain");
         intent.setPackage("com.whatsapp");
         startActivity(Intent.createChooser(intent, "Share with"));
+    }
+
+    private void addDisclaimer() {
+        LinearLayout linearLayout = findViewById(R.id.bottom_linear_layout);
+        TextView textView = new TextView(this);
+        textView.setText(R.string.disclaimer);
+        textView.setGravity(Gravity.CENTER_HORIZONTAL);
+        linearLayout.addView(textView);
     }
 }

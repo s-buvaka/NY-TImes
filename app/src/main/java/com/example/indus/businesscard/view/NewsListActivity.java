@@ -1,14 +1,19 @@
-package com.example.indus.businesscard;
+package com.example.indus.businesscard.view;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.indus.businesscard.adapters.NewsAdapter;
+import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.data.DataUtils;
 import com.example.indus.businesscard.data.NewsItem;
 
@@ -18,7 +23,7 @@ public class NewsListActivity extends AppCompatActivity {
     private List<NewsItem> news;
     private RecyclerView newsRecycler;
     private NewsAdapter newsAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,17 +34,13 @@ public class NewsListActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        news = DataUtils.generateNews();
-        newsRecycler = findViewById(R.id.news_recycler_view);
-        layoutManager = new LinearLayoutManager(this);
-        newsAdapter = new NewsAdapter(news);
-        newsRecycler.setAdapter(newsAdapter);
+        createRecycler();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -52,5 +53,18 @@ public class NewsListActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    private void createRecycler(){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            layoutManager = new LinearLayoutManager(this);
+        } else {
+            layoutManager = new GridLayoutManager(this, 2);
+        }
+        news = DataUtils.generateNews();
+        newsRecycler = findViewById(R.id.news_recycler_view);
+        newsRecycler.setLayoutManager(layoutManager);
+        newsAdapter = new NewsAdapter(news);
+        newsRecycler.setAdapter(newsAdapter);
     }
 }

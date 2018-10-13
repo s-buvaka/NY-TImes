@@ -14,4 +14,5 @@
     <string name="hint">Enter a message</string>
     <string name="button_text">Send Message</string>
     <string name="menu_title">About me</string>
+    <string name="disclaimer"><![CDATA[<string name=\"disclaimer\">© 2018 Sergey Buvaka</string>]]></string>
 </resources>

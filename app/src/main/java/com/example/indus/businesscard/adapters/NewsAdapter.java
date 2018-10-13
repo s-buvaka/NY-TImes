@@ -1,4 +1,4 @@
-package com.example.indus.businesscard;
+package com.example.indus.businesscard.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.data.NewsItem;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder newsViewHolder, int position) {
-        newsViewHolder.bind(news.get(position));
+        newsViewHolder.bind(news.get(position), position);
     }
 
     @Override
