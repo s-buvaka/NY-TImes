@@ -19,7 +19,7 @@
     android:layout_height="match_parent"
     android:scrollbars="vertical"
     tools:context=".view.NewsListActivity"
-    tools:listitem="@layout/item_news">
+    tools:listitem="@layout/item_news_darwin_awards">
 
 </android.support.v7.widget.RecyclerView>
 </LinearLayout>

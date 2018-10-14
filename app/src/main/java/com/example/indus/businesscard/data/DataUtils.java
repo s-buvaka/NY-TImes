@@ -1,5 +1,7 @@
 package com.example.indus.businesscard.data;
 
+import com.example.indus.businesscard.Const;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -8,10 +10,10 @@ import java.util.List;
 public class DataUtils {
 
   public static List<NewsItem> generateNews() {
-    final Category darwinAwards = new Category(1, "Darwin Awards");
-    final Category criminal = new Category(2, "Criminal");
-    final Category animals = new Category(3, "Animals");
-    final Category music = new Category(4, "Music");
+    final Category darwinAwards = new Category(Const.CATEGORY_DARWIN_AWARDS, "Darwin Awards");
+    final Category criminal = new Category(Const.CATEGORY_CRIMINAL, "Criminal");
+    final Category animals = new Category(Const.CATEGORY_ANIMALS, "Animals");
+    final Category music = new Category(Const.CATEGORY_MUSIC, "Music");
 
     List<NewsItem> news = new ArrayList<>();
     news.add(new NewsItem(
