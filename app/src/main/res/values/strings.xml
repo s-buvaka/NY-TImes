@@ -15,4 +15,5 @@
     <string name="button_text">Send Message</string>
     <string name="menu_title">About me</string>
     <string name="disclaimer"><![CDATA[<string name=\"disclaimer\">© 2018 Sergey Buvaka</string>]]></string>
+    <string name="news_photo_description">News Photo</string>
 </resources>

@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_height"
-    app:cardUseCompatPadding="true"
-    app:cardCornerRadius="3dp"
-    app:cardElevation="4dp">
+    app:cardCornerRadius="@dimen/item_news_corner_radius"
+    app:cardElevation="@dimen/item_news_elevation"
+    app:cardUseCompatPadding="true">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraint_layout"
@@ -16,9 +16,12 @@
 
         <ImageView
             android:id="@+id/item_photo"
-            android:layout_width="128dp"
+            android:layout_width="@dimen/item_view_photo_width"
             android:layout_height="0dp"
-            android:layout_margin="@dimen/item_margin"
+            android:layout_marginBottom="@dimen/item_margin"
+            android:layout_marginEnd="@dimen/item_margin"
+            android:layout_marginTop="@dimen/item_margin"
+            android:contentDescription="@string/news_photo_description"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +46,7 @@
             android:id="@+id/item_preview_text"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="@dimen/item_margin"
             android:layout_marginTop="@dimen/item_margin"
             android:maxLines="5"
             android:textColor="@color/colorBlack"
@@ -60,11 +63,11 @@ kill you in  a fraction of a second, he says" />
             android:id="@+id/item_published_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="@dimen/item_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/item_preview_text"
-            tools:text="4 hr. ago, 10:34 AM" />
+            tools:text="4 hr. ago, 10:34" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>
