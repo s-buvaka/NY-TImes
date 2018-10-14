@@ -24,7 +24,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view;
-        switch (viewType){
+        switch (viewType) {
             case Const.CATEGORY_DARWIN_AWARDS:
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.item_news_darwin_awards, viewGroup, false);
@@ -41,8 +41,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
                 view = LayoutInflater.from(viewGroup.getContext())
                         .inflate(R.layout.item_news_music, viewGroup, false);
                 return new NewsViewHolder(view);
+            default:
+                view = LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.item_news_darwin_awards, viewGroup, false);
+                return new NewsViewHolder(view);
+
         }
-        return null;
     }
 
     @Override
