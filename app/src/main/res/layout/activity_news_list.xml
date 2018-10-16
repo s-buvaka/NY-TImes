@@ -5,7 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"/>
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/news_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,5 +18,5 @@
         tools:context=".view.NewsListActivity"
         tools:listitem="@layout/item_news_darwin_awards">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>
