@@ -15,6 +15,7 @@ import android.view.MenuItem;
 
 import com.example.indus.businesscard.adapters.NewsAdapter;
 import com.example.indus.businesscard.R;
+import com.example.indus.businesscard.adapters.NewsItemDecorator;
 import com.example.indus.businesscard.data.DataUtils;
 import com.example.indus.businesscard.data.NewsItem;
 
@@ -31,10 +32,10 @@ public class NewsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
-        ActionBar actionBar = getSupportActionBar();
+        /*ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        }*/
         createRecycler();
     }
 
@@ -65,6 +66,7 @@ public class NewsListActivity extends AppCompatActivity {
         }
         news = DataUtils.generateNews();
         newsRecycler = findViewById(R.id.news_recycler_view);
+        newsRecycler.addItemDecoration(new NewsItemDecorator(4));
         newsRecycler.setLayoutManager(layoutManager);
         newsAdapter = new NewsAdapter(news);
         newsRecycler.setAdapter(newsAdapter);

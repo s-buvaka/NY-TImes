@@ -73,4 +73,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
         }
         return super.getItemViewType(position);
     }
+
+
 }
