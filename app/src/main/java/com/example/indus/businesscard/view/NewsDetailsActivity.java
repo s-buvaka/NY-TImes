@@ -2,7 +2,13 @@ package com.example.indus.businesscard.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +29,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     private TextView detailsTitle;
     private TextView detailsPublishedDate;
     private TextView detailsOverviewText;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +37,44 @@ public class NewsDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_news_details);
 
         initView();
+        createToolbar();
+        setViewData();
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                ////todo сделать возврат
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void initView() {
+        detailsPhoto = findViewById(R.id.details_photo);
+        detailsTitle = findViewById(R.id.details_title);
+        detailsPublishedDate = findViewById(R.id.details_published_date);
+        detailsOverviewText = findViewById(R.id.details_overview);
+    }
+
+    private void createToolbar(){
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void setViewData(){
         news = DataUtils.generateNews();
         Intent intent = getIntent();
         int newsId = intent.getIntExtra(Const.NEWS_ID, -1);
@@ -44,12 +88,5 @@ public class NewsDetailsActivity extends AppCompatActivity {
         detailsTitle.setText(news.get(newsId).getTitle());
         detailsOverviewText.setText(news.get(newsId).getFullText());
 
-    }
-
-    private void initView() {
-        detailsPhoto = findViewById(R.id.details_photo);
-        detailsTitle = findViewById(R.id.details_title);
-        detailsPublishedDate = findViewById(R.id.details_published_date);
-        detailsOverviewText = findViewById(R.id.details_overview);
     }
 }

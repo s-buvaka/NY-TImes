@@ -3,6 +3,7 @@ package com.example.indus.businesscard.view;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,13 +33,8 @@ public class NewsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        /*ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }*/
         createRecycler();
+        createToolbar();
     }
 
     @Override
@@ -50,7 +46,7 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.about_me:
+            case R.id.action_switch:
                 Log.d("MyLogs", "click");
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
@@ -72,5 +68,10 @@ public class NewsListActivity extends AppCompatActivity {
         newsRecycler.setLayoutManager(layoutManager);
         newsAdapter = new NewsAdapter(news);
         newsRecycler.setAdapter(newsAdapter);
+    }
+
+    private void createToolbar(){
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 }

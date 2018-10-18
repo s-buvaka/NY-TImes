@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">Business Card</string>
-    <string name="Web_Resume">Head Hunter</string>
+    <string name="app_name" translatable="false">Business Card</string>
+    <string name="Web_Resume" translatable="false">Head Hunter</string>
     <string name="my_name">Бувака Сергей</string>
     <string name="my_position">Android Developer</string>
-    <string name="my_phone_number">8 968 961 36 00</string>
+    <string name="my_phone_number" translatable="false">8 968 961 36 00</string>
     <string name="about_me">В течении года занимаюсь обучением разработке приложений под Android.
 До этого времени моя работа не была связана с IT-сферой.
 Имею жизенную цель и уверенно к ней иду. Любой свой навык всегда стараюсь совершенствовать.
@@ -14,6 +14,6 @@
     <string name="hint">Enter a message</string>
     <string name="button_text">Send Message</string>
     <string name="menu_title">About me</string>
-    <string name="disclaimer"><![CDATA[<string name=\"disclaimer\">© 2018 Sergey Buvaka</string>]]></string>
+    <string name="disclaimer">© 2018 Sergey Buvaka</string>
     <string name="news_photo_description">News Photo</string>
 </resources>

@@ -3,16 +3,23 @@ package com.example.indus.businesscard.view;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+import android.text.Layout;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.indus.businesscard.R;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,6 +34,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     private Button sendMessageBtn;
     private ImageView myResumeWebLink;
     private ImageView instagramLogo, whatsAppLogo, facebookLogo;
+    private Toolbar toolbar;
 
 
     @Override
@@ -38,6 +46,24 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         viewSetFocusable();
         setClickListeners();
         addDisclaimer();
+        createToolbar();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                ////todo сделать возврат
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -74,6 +100,16 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         facebookLogo = findViewById(R.id.facebook_logo);
     }
 
+    private void createToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
     private void viewSetFocusable() {
         myPhoneNumber.setFocusable(true);
         myResumeWebLink.setFocusable(true);
@@ -93,12 +129,12 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         facebookLogo.setOnClickListener(this);
     }
 
-    private void openFacebook(){
+    private void openFacebook() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(MY_FACEBOOK));
         startActivity(intent);
     }
 
-    private void openInstagram(){
+    private void openInstagram() {
         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(MY_INSTAGRAM));
         startActivity(intent);
     }
@@ -114,7 +150,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         startActivity(intent);
     }
 
-    private void sendEmail(){
+    private void sendEmail() {
         String message = messageEnter.getText().toString();
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse("mailto:"));
@@ -125,7 +161,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private void openWhatsApp(){
+    private void openWhatsApp() {
         String uriSMS = "smsto:" + MY_NUMBER;
         Intent intent = new Intent(Intent.ACTION_SEND, Uri.parse(uriSMS));
         intent.setType("text/plain");
@@ -134,10 +170,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void addDisclaimer() {
-        LinearLayout linearLayout = findViewById(R.id.bottom_linear_layout);
+        RelativeLayout relativeLayout = findViewById(R.id.bottom_relative_layout);
         TextView textView = new TextView(this);
         textView.setText(R.string.disclaimer);
         textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        linearLayout.addView(textView);
+        relativeLayout.addView(textView);
     }
 }
