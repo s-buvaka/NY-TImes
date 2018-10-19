@@ -2,11 +2,7 @@ package com.example.indus.businesscard.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -20,6 +16,10 @@ import com.example.indus.businesscard.data.NewsItem;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class NewsDetailsActivity extends AppCompatActivity {
 
@@ -49,10 +49,14 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
-                ////todo сделать возврат
+                super.onBackPressed();
                 break;
+            case R.id.action_switch:
+                Log.d("MyLogs", "click");
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -64,7 +68,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         detailsOverviewText = findViewById(R.id.details_overview);
     }
 
-    private void createToolbar(){
+    private void createToolbar() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -74,7 +78,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void setViewData(){
+    private void setViewData() {
         news = DataUtils.generateNews();
         Intent intent = getIntent();
         int newsId = intent.getIntExtra(Const.NEWS_ID, -1);

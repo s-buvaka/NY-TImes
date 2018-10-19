@@ -14,9 +14,11 @@
     <!--About Activity Dimens-->
     <dimen name="about_activity_margin">8dp</dimen>
     <dimen name="name_text_size">24sp</dimen>
-    <dimen name="icon_dim">40dp</dimen>
+    <dimen name="social_icon_dim">40dp</dimen>
+    <dimen name="icon_dim">56dp</dimen>
+    <dimen name="icon_dim_width">95dp</dimen>
     <dimen name="position_text_size">16sp</dimen>
-    <dimen name="indentation">16dp</dimen>
+    <dimen name="indentation">12dp</dimen>
     <dimen name="social_margin">56dp</dimen>
     <dimen name="sw600_margin">32dp</dimen>
 
@@ -24,7 +26,6 @@
     <dimen name="details_title__text_size">18sp</dimen>
     <dimen name="details_overview_text_size">14sp</dimen>
     <dimen name="details_margin">8dp</dimen>
-
 
 
 </resources>

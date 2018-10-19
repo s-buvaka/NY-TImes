@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,16 +51,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_list, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                ////todo сделать возврат
+                super.onBackPressed();
                 break;
         }
 
@@ -170,10 +165,14 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void addDisclaimer() {
-        RelativeLayout relativeLayout = findViewById(R.id.bottom_relative_layout);
+        LinearLayout linearLayout = findViewById(R.id.scroll_layout);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams
+                (ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(8,8,8,8);
         TextView textView = new TextView(this);
         textView.setText(R.string.disclaimer);
-        textView.setGravity(Gravity.CENTER_HORIZONTAL);
-        relativeLayout.addView(textView);
+        textView.setGravity(Gravity.END);
+        textView.setLayoutParams(layoutParams);
+        linearLayout.addView(textView);
     }
 }
