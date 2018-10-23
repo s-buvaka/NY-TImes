@@ -24,29 +24,28 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         View view;
+        int layoutId;
         switch (viewType) {
             case Const.CATEGORY_DARWIN_AWARDS:
-                view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_news_darwin_awards, viewGroup, false);
-                return new NewsViewHolder(view);
+               layoutId = R.layout.item_news_darwin_awards;
+               break;
             case Const.CATEGORY_CRIMINAL:
-                view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_news_criminal, viewGroup, false);
-                return new NewsViewHolder(view);
+                layoutId = R.layout.item_news_criminal;
+                break;
             case Const.CATEGORY_ANIMALS:
-                view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_news_animals, viewGroup, false);
-                return new NewsViewHolder(view);
+                layoutId = R.layout.item_news_animals;
+                break;
             case Const.CATEGORY_MUSIC:
-                view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_news_music, viewGroup, false);
-                return new NewsViewHolder(view);
+                layoutId = R.layout.item_news_music;
+                break;
             default:
-                view = LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.item_news_darwin_awards, viewGroup, false);
-                return new NewsViewHolder(view);
+                layoutId = R.layout.item_news_darwin_awards;
+                break;
 
         }
+        view = LayoutInflater.from(viewGroup.getContext())
+                .inflate(layoutId, viewGroup, false);
+        return new NewsViewHolder(view);
     }
 
     @Override
@@ -61,17 +60,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
 
     @Override
     public int getItemViewType(int position) {
-        switch (news.get(position).getCategory().getId()) {
-            case Const.CATEGORY_DARWIN_AWARDS:
-                return Const.CATEGORY_DARWIN_AWARDS;
-            case Const.CATEGORY_CRIMINAL:
-                return Const.CATEGORY_CRIMINAL;
-            case Const.CATEGORY_ANIMALS:
-                return Const.CATEGORY_ANIMALS;
-            case Const.CATEGORY_MUSIC:
-                return Const.CATEGORY_MUSIC;
-        }
-        return super.getItemViewType(position);
+        return news.get(position).getCategory().getId();
     }
 
 

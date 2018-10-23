@@ -64,7 +64,7 @@ public class NewsListActivity extends AppCompatActivity {
         }
         news = DataUtils.generateNews();
         newsRecycler = findViewById(R.id.news_recycler_view);
-        newsRecycler.addItemDecoration(new NewsItemDecorator(4));
+        newsRecycler.addItemDecoration(new NewsItemDecorator(this,4));
         newsRecycler.setLayoutManager(layoutManager);
         newsAdapter = new NewsAdapter(news);
         newsRecycler.setAdapter(newsAdapter);
