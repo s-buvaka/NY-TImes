@@ -13,15 +13,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.indus.businesscard.Const;
 import com.example.indus.businesscard.adapters.NewsAdapter;
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.adapters.NewsItemDecorator;
+import com.example.indus.businesscard.adapters.OnRecyclerViewItemClickedListener;
 import com.example.indus.businesscard.data.DataUtils;
 import com.example.indus.businesscard.data.NewsItem;
 
 import java.util.List;
 
-public class NewsListActivity extends AppCompatActivity {
+public class NewsListActivity extends AppCompatActivity implements OnRecyclerViewItemClickedListener {
     private List<NewsItem> news;
     private RecyclerView newsRecycler;
     private NewsAdapter newsAdapter;
@@ -66,12 +68,25 @@ public class NewsListActivity extends AppCompatActivity {
         newsRecycler = findViewById(R.id.news_recycler_view);
         newsRecycler.addItemDecoration(new NewsItemDecorator(this,4));
         newsRecycler.setLayoutManager(layoutManager);
-        newsAdapter = new NewsAdapter(news);
+        newsAdapter = new NewsAdapter(this,news);
         newsRecycler.setAdapter(newsAdapter);
     }
 
     private void createToolbar(){
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    /**
+     * Call {@link NewsDetailsActivity} when recycler view item is clicked,
+     * to display detailed news
+     *
+     * @param position of the news article from the data to be shown
+     */
+    @Override
+    public void onClick(int position) {
+        Intent openNewsDetails = new Intent(this, NewsDetailsActivity.class);
+        openNewsDetails.putExtra(Const.NEWS_ID, position);
+        startActivity(openNewsDetails);
     }
 }
