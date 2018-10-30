@@ -1,5 +1,6 @@
 package com.example.indus.businesscard.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.indus.businesscard.Const;
+import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.data.DataUtils;
 import com.example.indus.businesscard.data.NewsItem;
@@ -17,11 +18,13 @@ import com.example.indus.businesscard.data.NewsItem;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class NewsDetailsActivity extends AppCompatActivity {
+    private final static String NEWS_ID = "news_id";
 
     private List<NewsItem> news;
 
@@ -81,7 +84,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     private void setViewData() {
         news = DataUtils.generateNews();
         Intent intent = getIntent();
-        int newsId = intent.getIntExtra(Const.NEWS_ID, -1);
+        int newsId = intent.getIntExtra(NEWS_ID, -1);
 
         Glide
                 .with(this)
@@ -92,5 +95,11 @@ public class NewsDetailsActivity extends AppCompatActivity {
         detailsTitle.setText(news.get(newsId).getTitle());
         detailsOverviewText.setText(news.get(newsId).getFullText());
 
+    }
+
+    public static void start(@NonNull Context context, @NonNull int newsId) {
+        Intent openNewsDetails = new Intent(context, NewsDetailsActivity.class);
+        openNewsDetails.putExtra(NEWS_ID, newsId);
+        context.startActivity(openNewsDetails);
     }
 }

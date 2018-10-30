@@ -1,7 +1,7 @@
-package com.example.indus.businesscard;
+package com.example.indus.businesscard.utils;
 
 public class Const {
-    public final static String NEWS_ID = "news_id";
+    public static final String LOG_TAG = "my logs";
     public final static String DATE_FORMAT = "MMM, dd, H:mm";
 
     //Category ID

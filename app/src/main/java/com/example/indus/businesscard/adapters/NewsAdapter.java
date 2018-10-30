@@ -6,19 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.indus.businesscard.Const;
+import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.data.NewsItem;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     @NonNull
-    private final List<NewsItem> news;
-
-    public NewsAdapter(@NonNull List<NewsItem> news) {
-        this.news = news;
-    }
+    private final List<NewsItem> news = new ArrayList<>();
 
     @NonNull
     @Override
@@ -64,4 +61,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
     }
 
 
+    public void replaceItems(List<NewsItem> newsItems) {
+        news.clear();
+        news.addAll(newsItems);
+        notifyDataSetChanged();
+    }
 }

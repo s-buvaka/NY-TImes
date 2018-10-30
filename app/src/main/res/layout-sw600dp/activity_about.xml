@@ -196,7 +196,7 @@
                         android:layout_marginBottom="@dimen/indentation"
                         android:textSize="@dimen/text_size"
                         android:background="@android:color/transparent"
-                        android:text="@string/button_text"
+                        android:text="@string/action_send_message"
                         android:textColor="@color/colorGrey" />
 
                     <LinearLayout

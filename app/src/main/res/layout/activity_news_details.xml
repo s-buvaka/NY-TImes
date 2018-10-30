@@ -46,6 +46,7 @@
                 android:layout_marginStart="@dimen/details_margin"
                 android:layout_marginEnd="@dimen/details_margin"
                 android:layout_marginBottom="@dimen/details_margin"
+                android:textColor="@color/colorGrey"
                 tools:text="@tools:sample/date/mmddyy" />
 
             <TextView
@@ -53,7 +54,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/details_margin"
-                android:textColor="@color/colorBlack"
                 android:textSize="@dimen/details_overview_text_size"
                 tools:text="@tools:sample/lorem/random" />
 

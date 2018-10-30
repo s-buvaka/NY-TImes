@@ -8,7 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.indus.businesscard.Const;
+import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.data.NewsItem;
 import com.example.indus.businesscard.view.NewsDetailsActivity;
@@ -44,9 +44,7 @@ public class NewsViewHolder extends RecyclerView.ViewHolder {
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent openNewsDetails = new Intent(view.getContext(), NewsDetailsActivity.class);
-                openNewsDetails.putExtra(Const.NEWS_ID, newsId);
-                view.getContext().startActivity(openNewsDetails);
+                NewsDetailsActivity.start(view.getContext(), newsId);
             }
         });
     }
