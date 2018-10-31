@@ -5,15 +5,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.data.NewsItem;
+import com.example.indus.businesscard.utils.Utils;
+import com.example.indus.businesscard.view.NewsDetailsActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
+public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
     @NonNull
     private final List<NewsItem> news = new ArrayList<>();
 
@@ -65,5 +72,40 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
         news.clear();
         news.addAll(newsItems);
         notifyDataSetChanged();
+    }
+
+    class NewsViewHolder extends RecyclerView.ViewHolder {
+
+        private final ImageView newsPhoto;
+        private final TextView newsTitle;
+        private final TextView newsPreviewText;
+        private final TextView newsPublishedDate;
+
+        public NewsViewHolder(@NonNull View itemView) {
+            super(itemView);
+            newsPhoto = itemView.findViewById(R.id.item_photo);
+            newsTitle = itemView.findViewById(R.id.item_title);
+            newsPreviewText = itemView.findViewById(R.id.item_preview_text);
+            newsPublishedDate = itemView.findViewById(R.id.item_published_date);
+        }
+
+
+        void bind (NewsItem newsItem, final int newsId){
+            Glide
+                    .with(newsPhoto.getContext())
+                    .load(newsItem.getImageUrl())
+                    .into(newsPhoto);
+            SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DATE_FORMAT);
+            newsPublishedDate.setText(dateFormat.format(newsItem.getPublishDate()));
+            newsTitle.setText(newsItem.getTitle());
+            newsPreviewText.setText(newsItem.getPreviewText());
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    NewsDetailsActivity.start(view.getContext(), newsId);
+                }
+            });
+        }
     }
 }
