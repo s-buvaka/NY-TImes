@@ -2,6 +2,8 @@ package com.example.indus.businesscard.adapters;
 
 import android.content.Context;
 import android.graphics.Rect;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.DisplayMetrics;
@@ -18,7 +20,8 @@ public class NewsItemDecorator extends RecyclerView.ItemDecoration {
     }
 
     @Override
-    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state)
+    public void getItemOffsets(@NonNull Rect outRect,@NonNull View view,
+                               @NonNull RecyclerView parent,@NonNull RecyclerView.State state)
     {
              outRect.bottom = space;
     }

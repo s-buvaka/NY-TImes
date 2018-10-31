@@ -34,7 +34,6 @@ public class NewsListActivity extends AppCompatActivity {
     private static final int SPACE_ITEM_DECORATION = 4;
 
     private NewsAdapter newsAdapter;
-    private RecyclerView.LayoutManager layoutManager;
     private Disposable disposable;
 
     private RecyclerView newsRecycler;
@@ -91,6 +90,7 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void createRecycler() {
+        RecyclerView.LayoutManager layoutManager;
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             layoutManager = new LinearLayoutManager(this);
         } else {

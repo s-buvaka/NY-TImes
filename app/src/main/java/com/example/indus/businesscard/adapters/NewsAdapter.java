@@ -2,6 +2,8 @@ package com.example.indus.businesscard.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.data.NewsItem;
-import com.example.indus.businesscard.utils.Utils;
 import com.example.indus.businesscard.view.NewsDetailsActivity;
 
 import java.text.SimpleDateFormat;
@@ -81,7 +81,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         private final TextView newsPreviewText;
         private final TextView newsPublishedDate;
 
-        public NewsViewHolder(@NonNull View itemView) {
+        NewsViewHolder(@NonNull View itemView) {
             super(itemView);
             newsPhoto = itemView.findViewById(R.id.item_photo);
             newsTitle = itemView.findViewById(R.id.item_title);
@@ -95,17 +95,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                     .with(newsPhoto.getContext())
                     .load(newsItem.getImageUrl())
                     .into(newsPhoto);
-            SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DATE_FORMAT);
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DATE_FORMAT);
             newsPublishedDate.setText(dateFormat.format(newsItem.getPublishDate()));
             newsTitle.setText(newsItem.getTitle());
             newsPreviewText.setText(newsItem.getPreviewText());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    NewsDetailsActivity.start(view.getContext(), newsId);
-                }
-            });
+            itemView.setOnClickListener(view -> NewsDetailsActivity.start(view.getContext(), newsId));
         }
     }
 }

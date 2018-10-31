@@ -1,5 +1,6 @@
 package com.example.indus.businesscard.view;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,13 +27,10 @@ import androidx.appcompat.widget.Toolbar;
 public class NewsDetailsActivity extends AppCompatActivity {
     private final static String NEWS_ID = "news_id";
 
-    private List<NewsItem> news;
-
     private ImageView detailsPhoto;
     private TextView detailsTitle;
     private TextView detailsPublishedDate;
     private TextView detailsOverviewText;
-    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +70,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     }
 
     private void createToolbar() {
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -82,7 +80,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
     }
 
     private void setViewData() {
-        news = DataUtils.generateNews();
+        List<NewsItem> news = DataUtils.generateNews();
         Intent intent = getIntent();
         int newsId = intent.getIntExtra(NEWS_ID, -1);
 
@@ -90,14 +88,14 @@ public class NewsDetailsActivity extends AppCompatActivity {
                 .with(this)
                 .load(news.get(newsId).getImageUrl())
                 .into(detailsPhoto);
-        SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DATE_FORMAT);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DATE_FORMAT);
         detailsPublishedDate.setText(dateFormat.format(news.get(newsId).getPublishDate()));
         detailsTitle.setText(news.get(newsId).getTitle());
         detailsOverviewText.setText(news.get(newsId).getFullText());
 
     }
 
-    public static void start(@NonNull Context context, @NonNull int newsId) {
+    public static void start(@NonNull Context context, int newsId) {
         Intent openNewsDetails = new Intent(context, NewsDetailsActivity.class);
         openNewsDetails.putExtra(NEWS_ID, newsId);
         context.startActivity(openNewsDetails);
