@@ -54,13 +54,18 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        disposable.dispose();
+        disposable = null;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         newsAdapter = null;
         newsRecycler = null;
         progress = null;
-        disposable.dispose();
-        disposable = null;
     }
 
     @Override
