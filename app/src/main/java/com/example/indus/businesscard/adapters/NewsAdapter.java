@@ -30,9 +30,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         View view;
         int layoutId;
         switch (viewType) {
-            case Const.CATEGORY_DARWIN_AWARDS:
-               layoutId = R.layout.item_news_darwin_awards;
-               break;
             case Const.CATEGORY_CRIMINAL:
                 layoutId = R.layout.item_news_criminal;
                 break;
@@ -43,7 +40,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                 layoutId = R.layout.item_news_music;
                 break;
             default:
-                layoutId = R.layout.item_news_darwin_awards;
+                layoutId = R.layout.item_news_default;
                 break;
 
         }
