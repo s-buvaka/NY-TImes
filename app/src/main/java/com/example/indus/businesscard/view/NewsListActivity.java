@@ -12,8 +12,10 @@ import android.widget.ProgressBar;
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.adapters.NewsAdapter;
 import com.example.indus.businesscard.adapters.NewsItemDecorator;
-import com.example.indus.businesscard.data.DataUtils;
-import com.example.indus.businesscard.data.NewsItem;
+import com.example.indus.businesscard.modeldto.NewsItem;
+import com.example.indus.businesscard.modeldto.NewsResponse;
+import com.example.indus.businesscard.network.INewsEndPoint;
+import com.example.indus.businesscard.network.RestApi;
 import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.utils.Utils;
 
@@ -24,7 +26,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -41,7 +42,6 @@ public class NewsListActivity extends AppCompatActivity {
     private ProgressBar progress;
     private View error;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +56,10 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        disposable.dispose();
-        disposable = null;
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
     }
 
     @Override
@@ -109,16 +111,19 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void loadItems() {
         showProgress(true);
-        disposable = Observable.fromCallable(DataUtils::generateNews)
+
+        INewsEndPoint endPoint = RestApi.getInstance().getEndPoint();
+        disposable = endPoint.getNews()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::updateItems,
                         this::handleError);
     }
 
-    private void updateItems(List<NewsItem> news) {
+    private void updateItems(NewsResponse newsResponse) {
+        List<NewsItem> resultsList = newsResponse.getResults();
         if (newsAdapter != null) {
-            newsAdapter.replaceItems(news);
+            newsAdapter.replaceItems(resultsList);
         }
         Utils.setVisible(newsRecycler, true);
         Utils.setVisible(progress, false);
@@ -136,6 +141,5 @@ public class NewsListActivity extends AppCompatActivity {
         Utils.setVisible(error, true);
         Utils.setVisible(progress, false);
         Utils.setVisible(newsRecycler, false);
-
     }
 }

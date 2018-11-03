@@ -1,9 +1,5 @@
 package com.example.indus.businesscard.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +7,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.indus.businesscard.utils.Const;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.indus.businesscard.R;
-import com.example.indus.businesscard.data.NewsItem;
+import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.view.NewsDetailsActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
     @NonNull
-    private final List<NewsItem> news = new ArrayList<>();
+    private final List<com.example.indus.businesscard.modeldto.NewsItem> news = new ArrayList<>();
 
     @NonNull
     @Override
@@ -51,7 +53,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder newsViewHolder, int position) {
-        newsViewHolder.bind(news.get(position), position);
+        newsViewHolder.bind(news.get(position));
     }
 
     @Override
@@ -59,13 +61,14 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         return news.size();
     }
 
-    @Override
+   /* @Override
     public int getItemViewType(int position) {
-        return news.get(position).getCategory().getId();
-    }
+        news.get(position).getSubsection();
+        return news.get(position).getSubsection();
+    }*/
 
 
-    public void replaceItems(List<NewsItem> newsItems) {
+    public void replaceItems(List<com.example.indus.businesscard.modeldto.NewsItem> newsItems) {
         news.clear();
         news.addAll(newsItems);
         notifyDataSetChanged();
@@ -87,17 +90,28 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         }
 
 
-        void bind (NewsItem newsItem, final int newsId){
-            Glide
-                    .with(newsPhoto.getContext())
-                    .load(newsItem.getImageUrl())
-                    .into(newsPhoto);
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DATE_FORMAT);
-            newsPublishedDate.setText(dateFormat.format(newsItem.getPublishDate()));
-            newsTitle.setText(newsItem.getTitle());
-            newsPreviewText.setText(newsItem.getPreviewText());
+        void bind(com.example.indus.businesscard.modeldto.NewsItem newsItem) {
+            if (!newsItem.getMultimedia().isEmpty()) {
+                Glide
+                        .with(newsPhoto.getContext())
+                        .load(newsItem.getMultimedia().get(0).getUrl())
+                        .apply(new RequestOptions()
+                                .placeholder(R.drawable.error_image))
+                        .into(newsPhoto);
+            }
+            SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DATE_FORMAT, Locale.ENGLISH);
+            String publishedDate = newsItem.getPublishedDate();
+            try {
+                Date date = dateFormat.parse(publishedDate);//todo не парсится значение. ПОЧИНИТЬ!
+                newsPublishedDate.setText(dateFormat.format(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-            itemView.setOnClickListener(view -> NewsDetailsActivity.start(view.getContext(), newsId));
+            newsTitle.setText(newsItem.getTitle());
+            newsPreviewText.setText(newsItem.getJsonMemberAbstract());
+
+            itemView.setOnClickListener(view -> NewsDetailsActivity.start(view.getContext(), newsItem.getUrl()));
         }
     }
 }
