@@ -13,13 +13,13 @@ public class RestApi {
     private static final int TIMEOUT_IN_SECOND = 2;
 
     private static RestApi sInstance;
-    private static INewsEndPoint sService;
+    private static INewsEndPoint sEndPoint;
 
     private RestApi() {
         OkHttpClient okHttpClient = buildOkHttpClient();
         Retrofit sRetrofit = buildRetrofit(okHttpClient);
 
-        sService = sRetrofit.create(INewsEndPoint.class);
+        sEndPoint = sRetrofit.create(INewsEndPoint.class);
     }
 
     public static synchronized RestApi getInstance() {
@@ -30,12 +30,12 @@ public class RestApi {
     }
 
     public INewsEndPoint getEndPoint() {
-        return sService;
+        return sEndPoint;
     }
 
     private OkHttpClient buildOkHttpClient(){
         return new OkHttpClient.Builder()
-                .addInterceptor(ApiKeyInterceptor.create(Const.API_KEY))
+                .addInterceptor(ApiKeyInterceptor.create())
                 .readTimeout(TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
                 .connectTimeout(TIMEOUT_IN_SECOND, TimeUnit.SECONDS)
                 .build();

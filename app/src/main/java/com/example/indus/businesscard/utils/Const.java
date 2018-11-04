@@ -6,11 +6,10 @@ public class Const {
     public final static String LOG_TAG = "my logs";
     public final static String DATE_FORMAT = "MMM, dd, H:mm";
 
+    public final static String[] CATEGORY_LIST = {"Home", "Opinion", "World", "National", "Politics",
+            "Upshot", "NY Region", "Business", "Technology", "Science", "Health", "Sports", "Arts",
+            "Books", "Movies", "Theatres", "Sunday Review", "Fashion", "Magazine", "Real Estate",
+            "Automobiles", "Obituaries", "Insider"};
 
-    //Category ID
-    public final static int CATEGORY_DARWIN_AWARDS = 1;
-    public final static int CATEGORY_CRIMINAL = 2;
-    public final static int CATEGORY_ANIMALS = 3;
-    public final static int CATEGORY_MUSIC = 4;
 
 }

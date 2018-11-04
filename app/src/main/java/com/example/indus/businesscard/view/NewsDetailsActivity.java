@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.webkit.WebView;
 
 import com.example.indus.businesscard.R;
+import com.example.indus.businesscard.utils.Const;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -43,7 +44,6 @@ public class NewsDetailsActivity extends AppCompatActivity {
                 super.onBackPressed();
                 break;
             case R.id.action_switch:
-                Log.d("MyLogs", "click");
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
         }

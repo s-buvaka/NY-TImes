@@ -7,7 +7,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.adapters.NewsAdapter;
@@ -36,6 +40,7 @@ public class NewsListActivity extends AppCompatActivity {
 
     private NewsAdapter newsAdapter;
     private Disposable disposable;
+    private INewsEndPoint endPoint;
 
     private RecyclerView newsRecycler;
     private Toolbar toolbar;
@@ -73,6 +78,7 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list, menu);
+        createSpinner(menu);
         return true;
     }
 
@@ -80,7 +86,6 @@ public class NewsListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_switch:
-                Log.d("MyLogs", "click");
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             default:
@@ -94,6 +99,9 @@ public class NewsListActivity extends AppCompatActivity {
         progress = findViewById(R.id.progress_bar);
         newsRecycler = findViewById(R.id.news_recycler_view);
         toolbar = findViewById(R.id.toolbar);
+
+        Button retryButton = findViewById(R.id.retry_button);
+        retryButton.setOnClickListener(view -> loadItems());
     }
 
     private void createRecycler() {
@@ -109,11 +117,40 @@ public class NewsListActivity extends AppCompatActivity {
         newsRecycler.setAdapter(newsAdapter);
     }
 
-    private void loadItems() {
-        showProgress(true);
+    private void createSpinner(Menu menu) {
+        MenuItem categorySpinner = menu.findItem(R.id.category_spinner);
+        Spinner spinner = (Spinner) categorySpinner.getActionView();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                R.layout.categoty_spinner_item, Const.CATEGORY_LIST);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                loadItemsByCategory(Const.CATEGORY_LIST[position].toLowerCase()
+                        .replaceAll("\\s", ""));
+            }
 
-        INewsEndPoint endPoint = RestApi.getInstance().getEndPoint();
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void loadItems() {
+        showProgress();
+
+        endPoint = RestApi.getInstance().getEndPoint();
         disposable = endPoint.getNews()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::updateItems,
+                        this::handleError);
+    }
+
+    private void loadItemsByCategory(String category) {
+        endPoint = RestApi.getInstance().getEndPoint();
+        disposable = endPoint.getNewsByCategory(category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::updateItems,
@@ -130,10 +167,10 @@ public class NewsListActivity extends AppCompatActivity {
         Utils.setVisible(error, false);
     }
 
-    private void showProgress(boolean isShow) {
-        Utils.setVisible(progress, isShow);
-        Utils.setVisible(error, !isShow);
-        Utils.setVisible(newsRecycler, !isShow);
+    private void showProgress() {
+        Utils.setVisible(progress, true);
+        Utils.setVisible(error, false);
+        Utils.setVisible(newsRecycler, false);
     }
 
     private void handleError(Throwable th) {

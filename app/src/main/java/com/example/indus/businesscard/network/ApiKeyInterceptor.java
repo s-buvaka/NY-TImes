@@ -19,9 +19,9 @@ public class ApiKeyInterceptor implements Interceptor {
         this.apiKey = apiKey;
     }
 
-    public static Interceptor create(@NonNull String apiKey){
+    static Interceptor create(){
         if(sInstance == null){
-            sInstance = new ApiKeyInterceptor(apiKey);
+            sInstance = new ApiKeyInterceptor(com.example.indus.businesscard.utils.Const.API_KEY);
         }
         return sInstance;
     }

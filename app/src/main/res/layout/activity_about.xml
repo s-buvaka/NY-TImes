@@ -114,8 +114,8 @@
                         android:layout_height="@dimen/icon_dim"
                         android:layout_alignBottom="@+id/qr_code"
                         android:layout_marginStart="@dimen/about_activity_margin"
+                        android:layout_toStartOf="@id/my_photo"
                         android:layout_toEndOf="@+id/qr_code"
-                        android:layout_toLeftOf="@id/my_photo"
                         android:paddingBottom="@dimen/about_activity_margin"
                         app:srcCompat="@drawable/hh_logo" />
 
@@ -136,9 +136,9 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:layout_alignBottom="@id/social"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/social"
                         android:scaleType="fitXY"
                         app:srcCompat="@drawable/dark_background" />
 
@@ -164,8 +164,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/top_view"
-                        android:layout_marginTop="@dimen/indentation"
                         android:layout_marginStart="@dimen/about_activity_margin"
+                        android:layout_marginTop="@dimen/indentation"
                         android:layout_marginEnd="@dimen/about_activity_margin"
                         android:ems="10"
                         android:hint="@string/hint"
@@ -179,19 +179,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_below="@id/message_enter"
+                        android:layout_marginStart="@dimen/about_activity_margin"
                         android:layout_marginTop="@dimen/about_activity_margin"
-                        android:background="@color/colorYellow"
                         android:layout_marginEnd="@dimen/about_activity_margin"
-                        android:layout_marginStart="@dimen/about_activity_margin"/>
+                        android:background="@color/colorYellow" />
 
                     <Button
                         android:id="@+id/send_message_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/about_activity_margin"
                         android:layout_below="@id/bottom_view"
                         android:layout_alignParentEnd="true"
                         android:layout_marginTop="@dimen/indentation"
+                        android:layout_marginEnd="@dimen/about_activity_margin"
                         android:layout_marginBottom="@dimen/indentation"
                         android:background="@android:color/transparent"
                         android:text="@string/action_send_message"
@@ -203,8 +203,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/send_message_btn"
                         android:gravity="bottom"
-                        android:paddingBottom="@dimen/about_activity_margin"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingBottom="@dimen/about_activity_margin">
 
 
                         <ImageView
