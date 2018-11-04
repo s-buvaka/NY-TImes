@@ -37,6 +37,7 @@ import io.reactivex.schedulers.Schedulers;
 public class NewsListActivity extends AppCompatActivity {
     private static final int SPAN_COUNT = 2;
     private static final int SPACE_ITEM_DECORATION = 4;
+    private static final String SELECTED_CATEGORY = "selected_category";
 
     private NewsAdapter newsAdapter;
     private Disposable disposable;
@@ -46,6 +47,7 @@ public class NewsListActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ProgressBar progress;
     private View error;
+    private String selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +57,12 @@ public class NewsListActivity extends AppCompatActivity {
         initView();
         createRecycler();
         setSupportActionBar(toolbar);
-        loadItems();
+        if (savedInstanceState != null) {
+            selectedCategory = savedInstanceState.getString(SELECTED_CATEGORY);
+            loadItemsByCategory(selectedCategory);
+        } else {
+            loadItems();
+        }
     }
 
     @Override
@@ -74,6 +81,14 @@ public class NewsListActivity extends AppCompatActivity {
         newsRecycler = null;
         progress = null;
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(SELECTED_CATEGORY, selectedCategory);
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -126,8 +141,9 @@ public class NewsListActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                loadItemsByCategory(Const.CATEGORY_LIST[position].toLowerCase()
-                        .replaceAll("\\s", ""));
+                selectedCategory = Const.CATEGORY_LIST[position].toLowerCase()
+                        .replaceAll("\\s", "");
+                loadItemsByCategory(selectedCategory);
             }
 
             @Override

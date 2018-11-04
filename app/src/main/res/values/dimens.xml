@@ -5,11 +5,11 @@
     <dimen name="item_margin">8dp</dimen>
     <dimen name="item_height">166dp</dimen>
     <dimen name="item_image_scale">100dp</dimen>
-    <dimen name="item_title_text_size">12sp</dimen>
+    <dimen name="item_title_text_size">16sp</dimen>
     <dimen name="item_news_padding">8dp</dimen>
     <dimen name="item_news_corner_radius">3dp</dimen>
     <dimen name="item_news_elevation">4dp</dimen>
-    <dimen name="item_view_photo_width">150dp</dimen>
+    <dimen name="item_view_photo_size">100dp</dimen>
 
     <!--About Activity Dimens-->
     <dimen name="about_activity_margin">8dp</dimen>

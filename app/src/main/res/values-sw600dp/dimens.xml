@@ -9,7 +9,7 @@
     <dimen name="item_news_padding">8dp</dimen>
     <dimen name="item_news_corner_radius">3dp</dimen>
     <dimen name="item_news_elevation">4dp</dimen>
-    <dimen name="item_view_photo_width">128dp</dimen>
+    <dimen name="item_view_photo_size">128dp</dimen>
 
     <!--About Activity Dimens-->
     <dimen name="about_activity_margin">8dp</dimen>

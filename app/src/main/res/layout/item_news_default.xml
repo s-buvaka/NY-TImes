@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/item_height"
+    android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/item_news_corner_radius"
     app:cardElevation="@dimen/item_news_elevation"
     app:cardUseCompatPadding="true">
@@ -16,8 +16,8 @@
 
         <ImageView
             android:id="@+id/item_photo"
-            android:layout_width="@dimen/item_view_photo_width"
-            android:layout_height="0dp"
+            android:layout_width="@dimen/item_view_photo_size"
+            android:layout_height="@dimen/item_view_photo_size"
             android:contentDescription="@string/news_photo_description"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -42,10 +42,9 @@
         <TextView
             android:id="@+id/item_preview_text"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/item_margin"
             android:layout_marginEnd="@dimen/item_margin"
-            android:maxLines="5"
             app:layout_constraintBottom_toTopOf="@+id/item_published_date"
             app:layout_constraintEnd_toStartOf="@+id/item_photo"
             app:layout_constraintStart_toStartOf="parent"
