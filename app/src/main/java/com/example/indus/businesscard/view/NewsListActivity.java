@@ -7,13 +7,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.adapters.NewsAdapter;
 import com.example.indus.businesscard.adapters.NewsItemDecorator;
-import com.example.indus.businesscard.data.DataUtils;
-import com.example.indus.businesscard.data.NewsItem;
+import com.example.indus.businesscard.modeldto.NewsItem;
+import com.example.indus.businesscard.modeldto.NewsResponse;
+import com.example.indus.businesscard.network.INewsEndPoint;
+import com.example.indus.businesscard.network.RestApi;
 import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.utils.Utils;
 
@@ -24,7 +30,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -32,15 +37,17 @@ import io.reactivex.schedulers.Schedulers;
 public class NewsListActivity extends AppCompatActivity {
     private static final int SPAN_COUNT = 2;
     private static final int SPACE_ITEM_DECORATION = 4;
+    private static final String SELECTED_CATEGORY = "selected_category";
 
     private NewsAdapter newsAdapter;
     private Disposable disposable;
+    private INewsEndPoint endPoint;
 
     private RecyclerView newsRecycler;
     private Toolbar toolbar;
     private ProgressBar progress;
     private View error;
-
+    private int selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +58,18 @@ public class NewsListActivity extends AppCompatActivity {
         createRecycler();
         setSupportActionBar(toolbar);
         loadItems();
+        if (savedInstanceState != null) {
+            selectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        disposable.dispose();
-        disposable = null;
+        if (disposable != null) {
+            disposable.dispose();
+            disposable = null;
+        }
     }
 
     @Override
@@ -69,8 +81,15 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SELECTED_CATEGORY, selectedCategory);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_list, menu);
+        createSpinner(menu);
         return true;
     }
 
@@ -78,7 +97,6 @@ public class NewsListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_switch:
-                Log.d("MyLogs", "click");
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             default:
@@ -92,6 +110,9 @@ public class NewsListActivity extends AppCompatActivity {
         progress = findViewById(R.id.progress_bar);
         newsRecycler = findViewById(R.id.news_recycler_view);
         toolbar = findViewById(R.id.toolbar);
+
+        Button retryButton = findViewById(R.id.retry_button);
+        retryButton.setOnClickListener(view -> loadItems());
     }
 
     private void createRecycler() {
@@ -107,28 +128,62 @@ public class NewsListActivity extends AppCompatActivity {
         newsRecycler.setAdapter(newsAdapter);
     }
 
+    private void createSpinner(Menu menu) {
+        MenuItem categorySpinner = menu.findItem(R.id.category_spinner);
+        Spinner spinner = (Spinner) categorySpinner.getActionView();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                R.layout.categoty_spinner_item, Const.CATEGORY_LIST);
+        spinner.setAdapter(adapter);
+        spinner.setSelection(selectedCategory);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                selectedCategory = position;
+                loadItemsByCategory(Const.CATEGORY_LIST[position].toLowerCase()
+                        .replaceAll("\\s", ""));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
     private void loadItems() {
-        showProgress(true);
-        disposable = Observable.fromCallable(DataUtils::generateNews)
+        showProgress();
+
+        endPoint = RestApi.getInstance().getEndPoint();
+        disposable = endPoint.getNews()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::updateItems,
                         this::handleError);
     }
 
-    private void updateItems(List<NewsItem> news) {
+    private void loadItemsByCategory(String category) {
+        endPoint = RestApi.getInstance().getEndPoint();
+        disposable = endPoint.getNewsByCategory(category)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::updateItems,
+                        this::handleError);
+    }
+
+    private void updateItems(NewsResponse newsResponse) {
+        List<NewsItem> resultsList = newsResponse.getResults();
         if (newsAdapter != null) {
-            newsAdapter.replaceItems(news);
+            newsAdapter.replaceItems(resultsList);
         }
         Utils.setVisible(newsRecycler, true);
         Utils.setVisible(progress, false);
         Utils.setVisible(error, false);
     }
 
-    private void showProgress(boolean isShow) {
-        Utils.setVisible(progress, isShow);
-        Utils.setVisible(error, !isShow);
-        Utils.setVisible(newsRecycler, !isShow);
+    private void showProgress() {
+        Utils.setVisible(progress, true);
+        Utils.setVisible(error, false);
+        Utils.setVisible(newsRecycler, false);
     }
 
     private void handleError(Throwable th) {
@@ -136,6 +191,5 @@ public class NewsListActivity extends AppCompatActivity {
         Utils.setVisible(error, true);
         Utils.setVisible(progress, false);
         Utils.setVisible(newsRecycler, false);
-
     }
 }

@@ -34,7 +34,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     private ImageView myResumeWebLink;
     private ImageView instagramLogo, whatsAppLogo, facebookLogo;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +53,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 super.onBackPressed();
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -108,8 +106,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         instagramLogo.setFocusable(true);
         whatsAppLogo.setFocusable(true);
         facebookLogo.setFocusable(true);
-
-
     }
 
     private void setClickListeners() {

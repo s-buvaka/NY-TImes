@@ -1,9 +1,5 @@
 package com.example.indus.businesscard.adapters;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +7,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.indus.businesscard.utils.Const;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.indus.businesscard.R;
-import com.example.indus.businesscard.data.NewsItem;
+import com.example.indus.businesscard.modeldto.NewsItem;
+import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.view.NewsDetailsActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
     @NonNull
@@ -27,46 +30,21 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
     @NonNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        View view;
-        int layoutId;
-        switch (viewType) {
-            case Const.CATEGORY_DARWIN_AWARDS:
-               layoutId = R.layout.item_news_darwin_awards;
-               break;
-            case Const.CATEGORY_CRIMINAL:
-                layoutId = R.layout.item_news_criminal;
-                break;
-            case Const.CATEGORY_ANIMALS:
-                layoutId = R.layout.item_news_animals;
-                break;
-            case Const.CATEGORY_MUSIC:
-                layoutId = R.layout.item_news_music;
-                break;
-            default:
-                layoutId = R.layout.item_news_darwin_awards;
-                break;
-
-        }
-        view = LayoutInflater.from(viewGroup.getContext())
+        int layoutId = R.layout.item_news_default;
+        View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(layoutId, viewGroup, false);
         return new NewsViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder newsViewHolder, int position) {
-        newsViewHolder.bind(news.get(position), position);
+        newsViewHolder.bind(news.get(position));
     }
 
     @Override
     public int getItemCount() {
         return news.size();
     }
-
-    @Override
-    public int getItemViewType(int position) {
-        return news.get(position).getCategory().getId();
-    }
-
 
     public void replaceItems(List<NewsItem> newsItems) {
         news.clear();
@@ -80,6 +58,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         private final TextView newsTitle;
         private final TextView newsPreviewText;
         private final TextView newsPublishedDate;
+        private final TextView newsCategory;
 
         NewsViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -87,20 +66,50 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             newsTitle = itemView.findViewById(R.id.item_title);
             newsPreviewText = itemView.findViewById(R.id.item_preview_text);
             newsPublishedDate = itemView.findViewById(R.id.item_published_date);
+            newsCategory = itemView.findViewById(R.id.item_category);
         }
 
 
-        void bind (NewsItem newsItem, final int newsId){
-            Glide
-                    .with(newsPhoto.getContext())
-                    .load(newsItem.getImageUrl())
-                    .into(newsPhoto);
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DATE_FORMAT);
-            newsPublishedDate.setText(dateFormat.format(newsItem.getPublishDate()));
+        void bind(NewsItem newsItem) {
+            setImage(newsItem, newsPhoto);
+            setDate(newsItem, newsPublishedDate);
+            setCategory(newsItem, newsCategory);
             newsTitle.setText(newsItem.getTitle());
-            newsPreviewText.setText(newsItem.getPreviewText());
+            newsPreviewText.setText(newsItem.getJsonMemberAbstract());
+            itemView.setOnClickListener(view -> NewsDetailsActivity.start(view.getContext(), newsItem.getUrl()));
+        }
+    }
 
-            itemView.setOnClickListener(view -> NewsDetailsActivity.start(view.getContext(), newsId));
+    private void setImage(NewsItem item, ImageView targetImageView) {
+        if (!item.getMultimedia().isEmpty()) {
+            Glide
+                    .with(targetImageView.getContext())
+                    .load(item.getMultimedia().get(0).getUrl())
+                    .apply(new RequestOptions()
+                            .placeholder(R.drawable.error_image))
+                    .into(targetImageView);
+        }
+    }
+
+    private void setDate(NewsItem item, TextView view) {
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat(Const.INPUT_DATE_FORMAT, Locale.ENGLISH);
+        String publishedDate = item.getPublishedDate();
+        try {
+            Date date = inputDateFormat.parse(publishedDate);
+            SimpleDateFormat outputDateFormat = new SimpleDateFormat(Const.OUTPUT_DATE_FORMAT, Locale.ENGLISH);
+            String output = outputDateFormat.format(date);
+            view.setText(output);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setCategory(NewsItem item, TextView view) {
+        if (item.getSubsection() != null) {
+            view.setText(item.getSubsection());
+        } else {
+            view.setVisibility(View.GONE);
         }
     }
 }

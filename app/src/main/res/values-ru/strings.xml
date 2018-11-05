@@ -10,4 +10,5 @@
     <string name="news_photo_description">Фото новости</string>
     <string name="error_message">Ошибка загрузки новостей</string>
     <string name="action_retry">Повторить попытку</string>
+    <string name="item_category">Категория</string>
 </resources>

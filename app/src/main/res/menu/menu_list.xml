@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/category_spinner"
+        android:title="@string/item_category"
+        app:actionViewClass="android.widget.Spinner"
+        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/action_switch"
         android:title="@string/menu_title"
+        android:icon="@drawable/about_me_icon"
         app:showAsAction="ifRoom" />
 </menu>
