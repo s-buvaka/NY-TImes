@@ -80,7 +80,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         }
     }
 
-    private void setImage(NewsItem item, ImageView targetImageView){
+    private void setImage(NewsItem item, ImageView targetImageView) {
         if (!item.getMultimedia().isEmpty()) {
             Glide
                     .with(targetImageView.getContext())
@@ -91,18 +91,21 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         }
     }
 
-    private void setDate(NewsItem item, TextView view){
-        SimpleDateFormat dateFormat = new SimpleDateFormat(Const.DATE_FORMAT, Locale.ENGLISH);
+    private void setDate(NewsItem item, TextView view) {
+        SimpleDateFormat inputDateFormat = new SimpleDateFormat(Const.INPUT_DATE_FORMAT, Locale.ENGLISH);
         String publishedDate = item.getPublishedDate();
         try {
-            Date date = dateFormat.parse(publishedDate);//todo не парсится значение. ПОЧИНИТЬ!
-            view.setText(dateFormat.format(date));
+            Date date = inputDateFormat.parse(publishedDate);
+            SimpleDateFormat outputDateFormat = new SimpleDateFormat(Const.OUTPUT_DATE_FORMAT, Locale.ENGLISH);
+            String output = outputDateFormat.format(date);
+            view.setText(output);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
     }
 
-    private void setCategory(NewsItem item, TextView view){
+    private void setCategory(NewsItem item, TextView view) {
         if (item.getSubsection() != null) {
             view.setText(item.getSubsection());
         } else {

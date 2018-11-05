@@ -1,5 +1,7 @@
 package com.example.indus.businesscard.network;
 
+import com.example.indus.businesscard.utils.Const;
+
 import java.io.IOException;
 
 import androidx.annotation.NonNull;
@@ -21,7 +23,7 @@ public class ApiKeyInterceptor implements Interceptor {
 
     static Interceptor create(){
         if(sInstance == null){
-            sInstance = new ApiKeyInterceptor(com.example.indus.businesscard.utils.Const.API_KEY);
+            sInstance = new ApiKeyInterceptor(Const.API_KEY);
         }
         return sInstance;
     }

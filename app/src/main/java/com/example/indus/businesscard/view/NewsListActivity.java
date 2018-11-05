@@ -47,7 +47,7 @@ public class NewsListActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ProgressBar progress;
     private View error;
-    private String selectedCategory;
+    private int selectedCategory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +57,9 @@ public class NewsListActivity extends AppCompatActivity {
         initView();
         createRecycler();
         setSupportActionBar(toolbar);
+        loadItems();
         if (savedInstanceState != null) {
-            selectedCategory = savedInstanceState.getString(SELECTED_CATEGORY);
-            loadItemsByCategory(selectedCategory);
-        } else {
-            loadItems();
+            selectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
         }
     }
 
@@ -85,10 +83,8 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(SELECTED_CATEGORY, selectedCategory);
+        outState.putInt(SELECTED_CATEGORY, selectedCategory);
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,12 +134,13 @@ public class NewsListActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 R.layout.categoty_spinner_item, Const.CATEGORY_LIST);
         spinner.setAdapter(adapter);
+        spinner.setSelection(selectedCategory);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                selectedCategory = Const.CATEGORY_LIST[position].toLowerCase()
-                        .replaceAll("\\s", "");
-                loadItemsByCategory(selectedCategory);
+                selectedCategory = position;
+                loadItemsByCategory(Const.CATEGORY_LIST[position].toLowerCase()
+                        .replaceAll("\\s", ""));
             }
 
             @Override
