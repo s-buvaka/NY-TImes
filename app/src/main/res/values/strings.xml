@@ -20,4 +20,5 @@
     <string name="action_retry">Retry</string>
     <string name="cont_description_decoration" translatable="false">Decoration</string>
     <string name="item_category">Category</string>
+    <string name="intro_greeting">Welcome!</string>
 </resources>
