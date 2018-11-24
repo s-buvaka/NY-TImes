@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.indus.businesscard.R;
+import com.example.indus.businesscard.modeldto.NewsEntity;
 import com.example.indus.businesscard.modeldto.NewsItem;
 import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.view.NewsDetailsActivity;
@@ -25,7 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
     @NonNull
-    private final List<NewsItem> news = new ArrayList<>();
+    private final List<NewsEntity> news = new ArrayList<>();
 
     @NonNull
     @Override
@@ -46,9 +47,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         return news.size();
     }
 
-    public void replaceItems(List<NewsItem> newsItems) {
+    public void replaceItems(List<NewsEntity> newsEntities) {
         news.clear();
-        news.addAll(newsItems);
+        news.addAll(newsEntities);
         notifyDataSetChanged();
     }
 
@@ -70,17 +71,17 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         }
 
 
-        void bind(NewsItem newsItem) {
-            setImage(newsItem, newsPhoto);
-            setDate(newsItem, newsPublishedDate);
-            setCategory(newsItem, newsCategory);
-            newsTitle.setText(newsItem.getTitle());
-            newsPreviewText.setText(newsItem.getJsonMemberAbstract());
-            itemView.setOnClickListener(view -> NewsDetailsActivity.start(view.getContext(), newsItem.getUrl()));
+        void bind(NewsEntity newsEntity) {
+            setImage(newsEntity, newsPhoto);
+            setDate(newsEntity, newsPublishedDate);
+            setCategory(newsEntity, newsCategory);
+            newsTitle.setText(newsEntity.getTitle());
+            newsPreviewText.setText(newsEntity.getPreviewText());
+            itemView.setOnClickListener(view -> NewsDetailsActivity.start(view.getContext(), newsEntity.getUrl()));
         }
     }
 
-    private void setImage(NewsItem item, ImageView targetImageView) {
+    private void setImage(NewsEntity item, ImageView targetImageView) {
         if (!item.getMultimedia().isEmpty()) {
             Glide
                     .with(targetImageView.getContext())
@@ -91,7 +92,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         }
     }
 
-    private void setDate(NewsItem item, TextView view) {
+    private void setDate(NewsEntity item, TextView view) {
         SimpleDateFormat inputDateFormat = new SimpleDateFormat(Const.INPUT_DATE_FORMAT, Locale.ENGLISH);
         String publishedDate = item.getPublishedDate();
         try {
@@ -105,7 +106,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
         }
     }
 
-    private void setCategory(NewsItem item, TextView view) {
+    private void setCategory(NewsEntity item, TextView view) {
         if (item.getSubsection() != null) {
             view.setText(item.getSubsection());
         } else {

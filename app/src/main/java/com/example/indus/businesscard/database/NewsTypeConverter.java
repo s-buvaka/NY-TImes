@@ -7,8 +7,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.TypeConverter;
 
 public class NewsTypeConverter {
@@ -27,8 +30,23 @@ public class NewsTypeConverter {
         return gson.toJson(multimediaItems, type);
     }
 
-    public static NewsEntity newsToDatabase(NewsItem newsItem) {
+    @NonNull
+    public static List<NewsEntity> convertToDatabase(@Nullable List<NewsItem> items) {
+        if (items == null) {
+            return new ArrayList<>();
+        }
+
+        List<NewsEntity> entities = new ArrayList<>();
+        for (NewsItem item: items) {
+            entities.add(newsToDatabase(item));
+        }
+
+        return entities;
+    }
+
+    private static NewsEntity newsToDatabase(NewsItem newsItem) {
         NewsEntity newsEntity = new NewsEntity();
+        newsEntity.setSection(newsItem.getSection());
         newsEntity.setSubsection(newsItem.getSubsection());
         newsEntity.setPreviewText(newsItem.getPreviewText());
         newsEntity.setTitle(newsItem.getTitle());
@@ -38,7 +56,8 @@ public class NewsTypeConverter {
         return newsEntity;
     }
 
-    public static NewsItem newsFromDatabase(NewsEntity newsEntity) {
+    //todo нужен ли он вообще???
+    private static NewsItem newsFromDatabase(NewsEntity newsEntity) {
         NewsItem newsItem = new NewsItem();
         newsItem.setSubsection(newsEntity.getSubsection());
         newsItem.setPreviewText(newsEntity.getPreviewText());

@@ -16,12 +16,14 @@ import android.widget.Spinner;
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.adapters.NewsAdapter;
 import com.example.indus.businesscard.adapters.NewsItemDecorator;
-import com.example.indus.businesscard.modeldto.NewsItem;
-import com.example.indus.businesscard.modeldto.NewsResponse;
+import com.example.indus.businesscard.database.NewsDatabase;
+import com.example.indus.businesscard.database.NewsTypeConverter;
+import com.example.indus.businesscard.modeldto.NewsEntity;
 import com.example.indus.businesscard.network.INewsEndPoint;
 import com.example.indus.businesscard.network.RestApi;
 import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.utils.Utils;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -31,7 +33,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class NewsListActivity extends AppCompatActivity {
@@ -40,8 +42,9 @@ public class NewsListActivity extends AppCompatActivity {
     private static final String SELECTED_CATEGORY = "selected_category";
 
     private NewsAdapter newsAdapter;
-    private Disposable disposable;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private INewsEndPoint endPoint;
+    private NewsDatabase newsDatabase;
 
     private RecyclerView newsRecycler;
     private Toolbar toolbar;
@@ -54,10 +57,9 @@ public class NewsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
-        initView();
+        init();
         createRecycler();
         setSupportActionBar(toolbar);
-        loadItems();
         if (savedInstanceState != null) {
             selectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
         }
@@ -66,18 +68,9 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (disposable != null) {
-            disposable.dispose();
-            disposable = null;
+        if (compositeDisposable != null) {
+            compositeDisposable.dispose();
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        newsAdapter = null;
-        newsRecycler = null;
-        progress = null;
     }
 
     @Override
@@ -102,17 +95,21 @@ public class NewsListActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
-    private void initView() {
+    private void init() {
+        newsDatabase = NewsDatabase.getAppDatabase(this);
+
         error = findViewById(R.id.error_layout);
         progress = findViewById(R.id.progress_bar);
         newsRecycler = findViewById(R.id.news_recycler_view);
         toolbar = findViewById(R.id.toolbar);
 
+        FloatingActionButton loadNewsFab = findViewById(R.id.load_news_fab);
+        loadNewsFab.setOnClickListener(loadNews);
+
         Button retryButton = findViewById(R.id.retry_button);
-        retryButton.setOnClickListener(view -> loadItems());
+        retryButton.setOnClickListener(loadNews);
     }
 
     private void createRecycler() {
@@ -139,8 +136,13 @@ public class NewsListActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 selectedCategory = position;
-                loadItemsByCategory(Const.CATEGORY_LIST[position].toLowerCase()
-                        .replaceAll("\\s", ""));
+                String category = Const.CATEGORY_LIST[position].toLowerCase()
+                        .replaceAll("\\s", "");
+                if (selectedCategory != 0) {
+                    loadItemsFromDbByCategory(category);
+                } else {
+                    loadItemsFromDB();
+                }
             }
 
             @Override
@@ -150,30 +152,62 @@ public class NewsListActivity extends AppCompatActivity {
         });
     }
 
-    private void loadItems() {
+    private void loadItemsFromNetwork() {
+        Utils.log("*** Load Items From Network");
         showProgress();
-
         endPoint = RestApi.getInstance().getEndPoint();
-        disposable = endPoint.getNews()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateItems,
-                        this::handleError);
+        compositeDisposable.add(
+                endPoint.getNews()
+                        .map(newsResponse -> {
+                            List<NewsEntity> result = NewsTypeConverter.convertToDatabase(newsResponse.getResults());
+                            newsDatabase.getNewsDao().deleteAll();
+                            newsDatabase.getNewsDao().insertAll(result);
+                            return result;
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::updateItems, this::handleError)
+        );
     }
 
-    private void loadItemsByCategory(String category) {
+    private void loadItemsFromNetworkByCategory(String category) {
+        Utils.log("*** Load Items From Network By Category");
+        //todo продумать как сохранять данные
+        showProgress();
         endPoint = RestApi.getInstance().getEndPoint();
-        disposable = endPoint.getNewsByCategory(category)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateItems,
-                        this::handleError);
+        compositeDisposable.add(
+                endPoint.getNewsByCategory(category)
+                        .map(newsResponse -> NewsTypeConverter.convertToDatabase(newsResponse.getResults()))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::updateItems, this::handleError)
+        );
     }
 
-    private void updateItems(NewsResponse newsResponse) {
-        List<NewsItem> resultsList = newsResponse.getResults();
+    private void loadItemsFromDB() {
+        Utils.log("*** Load Items From DB");
+        compositeDisposable.add(
+                newsDatabase.getNewsDao().getAll()
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::updateItems, this::handleError)//todo поменять onError
+        );
+    }
+
+    private void loadItemsFromDbByCategory(String category) {
+        Utils.log("*** Load Items From DB By Category. Category = " + category);
+        compositeDisposable.add(
+                newsDatabase.getNewsDao().getNewsByCategory(category)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::updateItems, this::handleError)//todo поменять onError
+        );
+    }
+
+    private void updateItems(List<NewsEntity> newsList) {
+        Utils.log("*** Update items. Adapter List = " + newsList.size());
         if (newsAdapter != null) {
-            newsAdapter.replaceItems(resultsList);
+            newsAdapter.replaceItems(newsList);
         }
         Utils.setVisible(newsRecycler, true);
         Utils.setVisible(progress, false);
@@ -192,4 +226,16 @@ public class NewsListActivity extends AppCompatActivity {
         Utils.setVisible(progress, false);
         Utils.setVisible(newsRecycler, false);
     }
+
+    private View.OnClickListener loadNews = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (selectedCategory == 0) {
+                NewsListActivity.this.loadItemsFromNetwork();
+            } else {
+                NewsListActivity.this.loadItemsFromNetworkByCategory(Const.CATEGORY_LIST[selectedCategory]
+                        .toLowerCase().replaceAll("\\s", ""));
+            }
+        }
+    };
 }
