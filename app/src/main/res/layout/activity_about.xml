@@ -1,236 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".view.AboutActivity">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?android:actionBarSize" />
+        android:layout_height="?android:actionBarSize"
+        android:background="@color/colorBlue"
+        app:title="@string/activity_about_title"
+        app:titleTextColor="@color/colorWhite" />
 
+    <ImageView
+        android:id="@+id/my_photo"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@+id/my_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:srcCompat="@drawable/selphi" />
 
-    <ScrollView
+    <TextView
+        android:id="@+id/my_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/my_name"
+        android:textColor="@color/colorBlack"
+        android:textSize="32sp"
+        android:typeface="serif"
+        app:layout_constraintBottom_toTopOf="@+id/my_position"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_photo" />
+
+    <TextView
+        android:id="@+id/my_position"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/my_position"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_name" />
+
+    <RelativeLayout
+        android:id="@+id/phone_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/view1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/my_position">
 
-        <LinearLayout
-            android:id="@+id/scroll_layout"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/phone_icon"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            app:srcCompat="@drawable/ic_baseline_phone_36px" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="@dimen/item_news_corner_radius"
-                app:cardElevation="@dimen/item_news_elevation"
-                app:cardUseCompatPadding="true">
+        <TextView
+            android:id="@+id/my_phone_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toEndOf="@id/phone_icon"
+            android:text="@string/my_number"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:typeface="serif" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/mobile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_phone_number"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toEndOf="@id/phone_icon"
+            android:text="@string/phone_number" />
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/my_web_link"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@drawable/yellow_background" />
+    </RelativeLayout>
 
-                    <ImageView
-                        android:id="@+id/my_photo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/my_web_link"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_toEndOf="@id/my_name"
-                        android:scaleType="fitCenter"
-                        app:srcCompat="@drawable/my_photo" />
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/colorGrey"
+        app:layout_constraintBottom_toTopOf="@+id/mail_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/phone_layout" />
 
-                    <TextView
-                        android:id="@+id/my_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/indentation"
-                        android:layout_marginTop="@dimen/indentation"
-                        android:fontFamily="serif"
-                        android:text="@string/my_name"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/name_text_size" />
+    <RelativeLayout
+        android:id="@+id/mail_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/view2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view1">
 
-                    <TextView
-                        android:id="@+id/my_position"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/my_name"
-                        android:layout_alignStart="@id/my_name"
-                        android:layout_marginTop="@dimen/indentation"
-                        android:fontFamily="sans-serif-smallcaps"
-                        android:text="@string/my_position"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/position_text_size" />
+        <ImageView
+            android:id="@+id/mail_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            app:srcCompat="@drawable/ic_baseline_mail_36px" />
 
-                    <ImageView
-                        android:id="@+id/phone_icon"
-                        android:layout_width="32dp"
-                        android:layout_height="22dp"
-                        android:layout_below="@id/my_position"
-                        android:layout_alignStart="@id/my_position"
-                        android:layout_marginStart="3dp"
-                        android:layout_marginTop="10dp"
-                        app:srcCompat="@drawable/phone" />
+        <TextView
+            android:id="@+id/my_mail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toEndOf="@id/mail_icon"
+            android:text="@string/my_mail"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:typeface="serif" />
 
-                    <TextView
-                        android:id="@+id/my_phone_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/my_position"
-                        android:layout_marginStart="@dimen/about_activity_margin"
-                        android:layout_marginTop="@dimen/indentation"
-                        android:layout_toEndOf="@id/phone_icon"
-                        android:fontFamily="sans-serif-smallcaps"
-                        android:text="@string/my_phone_number"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="@dimen/position_text_size" />
+        <TextView
+            android:id="@+id/mail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_mail"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toEndOf="@id/mail_icon"
+            android:text="@string/personal_mail" />
 
-                    <ImageView
-                        android:id="@+id/qr_code"
-                        android:layout_width="@dimen/icon_dim"
-                        android:layout_height="@dimen/icon_dim"
-                        android:layout_below="@id/phone_icon"
-                        android:layout_alignStart="@id/phone_icon"
-                        android:layout_marginTop="@dimen/indentation"
-                        android:paddingBottom="@dimen/about_activity_margin"
-                        app:srcCompat="@drawable/qr_code" />
-
-                    <ImageView
-                        android:id="@+id/my_web_link"
-                        android:layout_width="@dimen/icon_dim_width"
-                        android:layout_height="@dimen/icon_dim"
-                        android:layout_alignBottom="@+id/qr_code"
-                        android:layout_marginStart="@dimen/about_activity_margin"
-                        android:layout_toStartOf="@id/my_photo"
-                        android:layout_toEndOf="@+id/qr_code"
-                        android:paddingBottom="@dimen/about_activity_margin"
-                        app:srcCompat="@drawable/hh_logo" />
-
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="@dimen/item_news_corner_radius"
-                app:cardElevation="@dimen/item_news_elevation"
-                app:cardUseCompatPadding="true">
+    </RelativeLayout>
 
 
-                <RelativeLayout
-                    android:id="@+id/scroll_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/colorGrey"
+        app:layout_constraintBottom_toTopOf="@id/web_layout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mail_layout" />
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/social"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@drawable/dark_background" />
+    <RelativeLayout
+        android:id="@+id/web_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view2">
 
-                    <TextView
-                        android:id="@+id/about_me"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/about_activity_margin"
-                        android:text="@string/about_me"
-                        android:textColor="@color/colorGrey" />
-
-                    <View
-                        android:id="@+id/top_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@id/about_me"
-                        android:layout_marginStart="@dimen/about_activity_margin"
-                        android:layout_marginEnd="@dimen/about_activity_margin"
-                        android:background="@color/colorYellow" />
-
-                    <EditText
-                        android:id="@+id/message_enter"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/top_view"
-                        android:layout_marginStart="@dimen/about_activity_margin"
-                        android:layout_marginTop="@dimen/indentation"
-                        android:layout_marginEnd="@dimen/about_activity_margin"
-                        android:ems="10"
-                        android:hint="@string/hint"
-                        android:inputType="textPersonName"
-                        android:textColor="@color/colorGrey"
-                        android:textColorHighlight="@color/colorYellow"
-                        android:textColorHint="@color/colorGrey" />
-
-                    <View
-                        android:id="@+id/bottom_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@id/message_enter"
-                        android:layout_marginStart="@dimen/about_activity_margin"
-                        android:layout_marginTop="@dimen/about_activity_margin"
-                        android:layout_marginEnd="@dimen/about_activity_margin"
-                        android:background="@color/colorYellow" />
-
-                    <Button
-                        android:id="@+id/send_message_btn"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/bottom_view"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="@dimen/indentation"
-                        android:layout_marginEnd="@dimen/about_activity_margin"
-                        android:layout_marginBottom="@dimen/indentation"
-                        android:background="@android:color/transparent"
-                        android:text="@string/action_send_message"
-                        android:textColor="@color/colorGrey" />
-
-                    <LinearLayout
-                        android:id="@+id/social"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/send_message_btn"
-                        android:gravity="bottom"
-                        android:orientation="horizontal"
-                        android:paddingBottom="@dimen/about_activity_margin">
+        <ImageView
+            android:id="@+id/web_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            app:srcCompat="@drawable/ic_baseline_web_36px" />
 
 
-                        <ImageView
-                            android:id="@+id/instagram_logo"
-                            android:layout_width="@dimen/social_icon_dim"
-                            android:layout_height="@dimen/social_icon_dim"
-                            android:layout_weight="1"
-                            app:srcCompat="@drawable/instagram_logo" />
+        <TextView
+            android:id="@+id/my_web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_toEndOf="@id/web_icon"
+            android:text="@string/my_web"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            android:typeface="serif" />
 
-                        <ImageView
-                            android:id="@+id/whatsapp_logo"
-                            android:layout_width="@dimen/social_icon_dim"
-                            android:layout_height="@dimen/social_icon_dim"
-                            android:layout_weight="1"
-                            app:srcCompat="@drawable/whatsapp_logo" />
+        <TextView
+            android:id="@+id/web"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_web"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toEndOf="@id/web_icon"
+            android:text="@string/web" />
 
-                        <ImageView
-                            android:id="@+id/facebook_logo"
-                            android:layout_width="@dimen/social_icon_dim"
-                            android:layout_height="@dimen/social_icon_dim"
-                            android:layout_weight="1"
-                            app:srcCompat="@drawable/facebook_logo" />
-                    </LinearLayout>
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </RelativeLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,8 +17,8 @@
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".view.AboutActivity"
-            android:theme="@style/Theme.MaterialComponents.NoActionBar"
             android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"
             tools:targetApi="cupcake" />
         <activity
             android:name=".view.NewsListActivity"
