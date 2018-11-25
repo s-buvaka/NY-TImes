@@ -89,7 +89,7 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_switch:
+            case R.id.about_me:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             default:
@@ -132,28 +132,10 @@ public class NewsListActivity extends AppCompatActivity {
                 R.layout.categoty_spinner_item, Const.CATEGORY_LIST);
         spinner.setAdapter(adapter);
         spinner.setSelection(selectedCategory);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                selectedCategory = position;
-                String category = Const.CATEGORY_LIST[position].toLowerCase()
-                        .replaceAll("\\s", "");
-                if (selectedCategory != 0) {
-                    loadItemsFromDbByCategory(category);
-                } else {
-                    loadItemsFromDB();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+        spinner.setOnItemSelectedListener(changeCategoryListener);
     }
 
     private void loadItemsFromNetwork() {
-        Utils.log("*** Load Items From Network");
         showProgress();
         endPoint = RestApi.getInstance().getEndPoint();
         compositeDisposable.add(
@@ -171,8 +153,6 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void loadItemsFromNetworkByCategory(String category) {
-        Utils.log("*** Load Items From Network By Category");
-        //todo продумать как сохранять данные
         showProgress();
         endPoint = RestApi.getInstance().getEndPoint();
         compositeDisposable.add(
@@ -185,27 +165,24 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     private void loadItemsFromDB() {
-        Utils.log("*** Load Items From DB");
         compositeDisposable.add(
                 newsDatabase.getNewsDao().getAll()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::updateItems, this::handleError)//todo поменять onError
+                        .subscribe(this::updateItems, this::handleError)
         );
     }
 
     private void loadItemsFromDbByCategory(String category) {
-        Utils.log("*** Load Items From DB By Category. Category = " + category);
         compositeDisposable.add(
                 newsDatabase.getNewsDao().getNewsByCategory(category)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::updateItems, this::handleError)//todo поменять onError
+                        .subscribe(this::updateItems, this::handleError)
         );
     }
 
     private void updateItems(List<NewsEntity> newsList) {
-        Utils.log("*** Update items. Adapter List = " + newsList.size());
         if (newsAdapter != null) {
             newsAdapter.replaceItems(newsList);
         }
@@ -236,6 +213,25 @@ public class NewsListActivity extends AppCompatActivity {
                 NewsListActivity.this.loadItemsFromNetworkByCategory(Const.CATEGORY_LIST[selectedCategory]
                         .toLowerCase().replaceAll("\\s", ""));
             }
+        }
+    };
+
+    private AdapterView.OnItemSelectedListener changeCategoryListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            selectedCategory = position;
+            String category = Const.CATEGORY_LIST[position].toLowerCase()
+                    .replaceAll("\\s", "");
+            if (selectedCategory != 0) {
+                loadItemsFromDbByCategory(category);
+            } else {
+                loadItemsFromDB();
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> parent) {
+
         }
     };
 }

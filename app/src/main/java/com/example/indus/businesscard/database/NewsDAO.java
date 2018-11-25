@@ -28,8 +28,8 @@ public interface NewsDAO {
     void insertAll(List<NewsEntity> entities);
 
     @Delete
-    void delete (NewsEntity newsEntity);
+    void delete(NewsEntity newsEntity);
 
     @Query("DELETE FROM newstables")
-    void deleteAll ();
+    void deleteAll();
 }

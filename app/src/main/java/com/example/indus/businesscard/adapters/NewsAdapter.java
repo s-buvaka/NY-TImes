@@ -10,7 +10,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.indus.businesscard.R;
 import com.example.indus.businesscard.modeldto.NewsEntity;
-import com.example.indus.businesscard.modeldto.NewsItem;
 import com.example.indus.businesscard.utils.Const;
 import com.example.indus.businesscard.view.NewsDetailsActivity;
 

@@ -3,13 +3,11 @@ package com.example.indus.businesscard.view;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
 import com.example.indus.businesscard.R;
-import com.example.indus.businesscard.utils.Const;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -43,7 +41,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
             case android.R.id.home:
                 super.onBackPressed();
                 break;
-            case R.id.action_switch:
+            case R.id.about_me:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
         }
