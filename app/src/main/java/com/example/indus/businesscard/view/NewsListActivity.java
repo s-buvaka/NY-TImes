@@ -42,7 +42,7 @@ public class NewsListActivity extends AppCompatActivity {
     private static final String SELECTED_CATEGORY = "selected_category";
 
     private NewsAdapter newsAdapter;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private CompositeDisposable compositeDisposable;
     private INewsEndPoint endPoint;
     private NewsDatabase newsDatabase;
 
@@ -66,8 +66,8 @@ public class NewsListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onDestroy() {
+        super.onDestroy();
         if (compositeDisposable != null) {
             compositeDisposable.dispose();
         }
@@ -81,7 +81,7 @@ public class NewsListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_list, menu);
+        getMenuInflater().inflate(R.menu.activity_news_menu_list, menu);
         createSpinner(menu);
         return true;
     }
@@ -89,7 +89,7 @@ public class NewsListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.about_me:
+            case R.id.about_me_menu_button:
                 startActivity(new Intent(this, AboutActivity.class));
                 return true;
             default:
@@ -99,6 +99,7 @@ public class NewsListActivity extends AppCompatActivity {
 
     private void init() {
         newsDatabase = NewsDatabase.getAppDatabase(this);
+        compositeDisposable = new CompositeDisposable();
 
         error = findViewById(R.id.error_layout);
         progress = findViewById(R.id.progress_bar);

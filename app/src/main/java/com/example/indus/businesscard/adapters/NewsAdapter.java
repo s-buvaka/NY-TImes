@@ -76,7 +76,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
             setCategory(newsEntity, newsCategory);
             newsTitle.setText(newsEntity.getTitle());
             newsPreviewText.setText(newsEntity.getPreviewText());
-            itemView.setOnClickListener(view -> NewsDetailsActivity.start(view.getContext(), newsEntity.getUrl()));
+            itemView.setOnClickListener(view ->
+                    NewsDetailsActivity.start(view.getContext(), newsEntity.getUrl(), newsEntity.getId()));
         }
     }
 

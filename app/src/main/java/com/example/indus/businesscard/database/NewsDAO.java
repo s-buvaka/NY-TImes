@@ -18,17 +18,14 @@ public interface NewsDAO {
     @Query("SELECT * FROM newstables")
     Observable<List<NewsEntity>> getAll();
 
-    @Query("SELECT * FROM newstables WHERE id = :id")
-    NewsEntity getNewsById(int id);
-
     @Query("SELECT * FROM newstables WHERE section LIKE :category")
     Single<List<NewsEntity>> getNewsByCategory(String category);
 
+    @Query("DELETE FROM newstables WHERE id IN (:id)")
+    int deleteById (int id);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<NewsEntity> entities);
-
-    @Delete
-    void delete(NewsEntity newsEntity);
 
     @Query("DELETE FROM newstables")
     void deleteAll();
