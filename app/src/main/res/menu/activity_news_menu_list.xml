@@ -9,8 +9,8 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_switch"
-        android:title="@string/menu_title"
+        android:id="@+id/about_me_menu_button"
         android:icon="@drawable/about_me_icon"
+        android:title="@string/menu_title"
         app:showAsAction="ifRoom" />
 </menu>

@@ -2,36 +2,36 @@ package com.example.indus.businesscard.modeldto;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RelatedUrlsItem{
+public class RelatedUrlsItem {
 
-	@SerializedName("suggested_link_text")
-	private String suggestedLinkText;
+    @SerializedName("suggested_link_text")
+    private String suggestedLinkText;
 
-	@SerializedName("url")
-	private String url;
+    @SerializedName("url")
+    private String url;
 
-	public void setSuggestedLinkText(String suggestedLinkText){
-		this.suggestedLinkText = suggestedLinkText;
-	}
+    public void setSuggestedLinkText(String suggestedLinkText) {
+        this.suggestedLinkText = suggestedLinkText;
+    }
 
-	public String getSuggestedLinkText(){
-		return suggestedLinkText;
-	}
+    public String getSuggestedLinkText() {
+        return suggestedLinkText;
+    }
 
-	public void setUrl(String url){
-		this.url = url;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public String getUrl(){
-		return url;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	@Override
- 	public String toString(){
-		return 
-			"RelatedUrlsItem{" + 
-			"suggested_link_text = '" + suggestedLinkText + '\'' + 
-			",url = '" + url + '\'' + 
-			"}";
-		}
+    @Override
+    public String toString() {
+        return
+                "RelatedUrlsItem{" +
+                        "suggested_link_text = '" + suggestedLinkText + '\'' +
+                        ",url = '" + url + '\'' +
+                        "}";
+    }
 }
