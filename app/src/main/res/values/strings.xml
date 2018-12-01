@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Business Card</string>
+    <string name="app_name" translatable="false">NY Times</string>
     <string name="my_name">Buvaka Sergei</string>
     <string name="my_position">Android developer</string>
     <string name="menu_title">About me</string>
@@ -17,5 +17,5 @@
     <string name="my_web" translatable="false">github.com/industradamus</string>
     <string name="web">Website</string>
     <string name="activity_about_title">Need a cool Android Developer?</string>
-    <string name="delete_menu_item_title">Delete</string>
+    <string name="delete_menu_item_title">Delete news</string>
 </resources>

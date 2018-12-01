@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.indus.businesscard">
+    package="com.example.indus.nytimes">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
 
     <application
         android:allowBackup="true"
@@ -16,22 +15,17 @@
         android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".view.AboutActivity"
-            android:windowSoftInputMode="stateHidden"
+            android:name="com.example.indus.nytimes.view.AboutActivity"
             android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
             tools:targetApi="cupcake" />
         <activity
-            android:name=".view.NewsListActivity"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity
-            android:name=".view.NewsDetailsActivity"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".view.IntroActivity"
+            android:name="com.example.indus.nytimes.view.IntroActivity"
             android:screenOrientation="portrait">
+        </activity>
+        <activity android:name="com.example.indus.nytimes.view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorBlue"
     android:orientation="vertical"
-    tools:context=".view.IntroActivity">
+    tools:context="com.example.indus.nytimes.view.IntroActivity">
 
     <ImageView
         android:id="@+id/imageView"

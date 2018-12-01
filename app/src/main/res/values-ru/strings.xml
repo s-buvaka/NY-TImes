@@ -13,4 +13,5 @@
     <string name="personal_mail">Личная почта</string>
     <string name="web">Сайт</string>
     <string name="activity_about_title">Нужен андроид разработчик?</string>
+    <string name="delete_menu_item_title">Удалить новость</string>
 </resources>
