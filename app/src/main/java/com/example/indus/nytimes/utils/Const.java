@@ -1,5 +1,7 @@
 package com.example.indus.nytimes.utils;
 
+import com.example.indus.nytimes.R;
+
 public class Const {
     public final static String BASE_URL = "https://api.nytimes.com/svc/topstories/v2/";
     public final static String API_KEY = "b2ec485ef2c8430e9bd72a04db414b88";
@@ -11,6 +13,9 @@ public class Const {
             "Upshot", "NY Region", "Business", "Technology", "Science", "Health", "Sports", "Arts",
             "Books", "Movies", "Theatres", "Sunday Review", "Fashion", "Magazine", "Real Estate",
             "Automobiles", "Obituaries", "Insider"};
+
+    public final static int[] INTRO_IMAGE_LIST =
+            {R.drawable.intro_1, R.drawable.intro_2 , R.drawable.intro_3};
 
 
 }

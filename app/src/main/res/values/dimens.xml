@@ -28,7 +28,7 @@
     <dimen name="details_margin">8dp</dimen>
     <dimen name="progress_bar_dim">70dp</dimen>
     <dimen name="category_spinner_text_size">20sp</dimen>
-    <dimen name="intro_margin">32dp</dimen>
+    <dimen name="intro_margin">24dp</dimen>
     <dimen name="intro_text_size">40sp</dimen>
 
 

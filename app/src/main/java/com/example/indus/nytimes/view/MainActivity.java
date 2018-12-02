@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
         if (savedInstanceState != null) {
             isDetails = savedInstanceState.getBoolean(CURRENT_FRAGMENT);
             selectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
-            if (!isDetails){
+            if (!isDetails) {
                 createFragment(newsListFragment);
             }
             newsListFragment.setCategory(selectedCategory);
@@ -90,14 +90,18 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setVisibleMenuItem(false);
+    }
+
     private void init() {
         newsListFragment = new NewsListFragment();
         newsDetailsFragment = new NewsDetailsFragment();
         fragmentManager = getSupportFragmentManager();
         toolbar = findViewById(R.id.toolbar);
         selectedCategory = 0;
-        newsListFragment.registerCallback(this);
-        newsDetailsFragment.registerCallback(this);
 
     }
 

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,15 +7,18 @@
     android:orientation="vertical"
     tools:context="com.example.indus.nytimes.view.IntroActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/intro_view_pager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="@dimen/intro_margin"
         android:layout_marginTop="@dimen/intro_margin"
-        android:layout_marginEnd="@dimen/intro_margin"
-        android:layout_weight="1"
-        app:srcCompat="@drawable/device_screenshot" />
+        android:layout_weight="1" />
+
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/intro_circle_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" />
 
     <TextView
         android:id="@+id/textView"
@@ -25,8 +27,10 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/intro_margin"
         android:layout_marginBottom="@dimen/intro_margin"
-        android:text="@string/intro_greeting"
         android:fontFamily="serif"
+        android:text="@string/intro_greeting"
         android:textColor="@color/colorWhite"
         android:textSize="@dimen/intro_text_size" />
+
+
 </LinearLayout>
