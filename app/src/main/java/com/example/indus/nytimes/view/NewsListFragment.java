@@ -1,6 +1,5 @@
 package com.example.indus.nytimes.view;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,28 +46,17 @@ public class NewsListFragment extends Fragment {
     private ProgressBar progress;
     private View error;
     private int selectedCategory;
-    private IMenuVisibilityController visibilityController;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (visibilityController != null) visibilityController.setVisibleMenuItem(false);
-        if (selectedCategory != 0) {
-            loadItemsFromDbByCategory(Utils.getCategoryById(selectedCategory));
-        } else {
-            loadItemsFromDB();
-        }
+        Utils.log("*** LIST FRAGMENT *** OnCreate");
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Utils.log("*** LIST FRAGMENT *** OnCreateView");
 
         View view = inflater.inflate(R.layout.news_list_fragment, container, false);
         init(view);
@@ -77,27 +65,39 @@ public class NewsListFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onStart() {
+        super.onStart();
+        Utils.log("*** LIST FRAGMENT *** OnStart");
+        if (selectedCategory != 0) {
+            loadItemsFromDbByCategory(Utils.getCategoryById(selectedCategory));
+        } else {
+            loadItemsFromDB();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Utils.log("*** LIST FRAGMENT *** OnDestroy");
         if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();
         }
     }
 
-    void registerCallback (Activity activity){
-        visibilityController = (IMenuVisibilityController) activity;
-    }
-
     void loadItemsFromDB() {
-        compositeDisposable.add(
-                newsDatabase.getNewsDao().getAll()
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::updateItems, this::handleError)
-        );
+        Utils.log("*** LIST FRAGMENT *** Load from DB");
+        if (newsDatabase != null) {
+            compositeDisposable.add(
+                    newsDatabase.getNewsDao().getAll()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this::updateItems, this::handleError)
+            );
+        }
     }
 
     void loadItemsFromDbByCategory(String category) {
+        Utils.log("*** LIST FRAGMENT *** Load from DB by category");
         compositeDisposable.add(
                 newsDatabase.getNewsDao().getNewsByCategory(category)
                         .subscribeOn(Schedulers.io())
@@ -111,8 +111,9 @@ public class NewsListFragment extends Fragment {
     }
 
     private void init(View view) {
-        newsDatabase = NewsDatabase.getAppDatabase(getActivity());
+        Utils.log("*** LIST FRAGMENT ***Init");
         compositeDisposable = new CompositeDisposable();
+        newsDatabase = NewsDatabase.getAppDatabase(getActivity());
 
         error = view.findViewById(R.id.error_layout);
         progress = view.findViewById(R.id.progress_bar);

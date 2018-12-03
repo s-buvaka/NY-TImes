@@ -1,6 +1,5 @@
 package com.example.indus.nytimes.view;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.webkit.WebView;
 
 import com.example.indus.nytimes.R;
 import com.example.indus.nytimes.database.NewsDatabase;
+import com.example.indus.nytimes.utils.Utils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,19 +26,18 @@ public class NewsDetailsFragment extends Fragment {
     private NewsDatabase newsDatabase;
     private int newsId;
     private String newsUrl;
-    private IMenuVisibilityController visibilityController;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         setRetainInstance(true);
+        Utils.log("*** DETAILS FRAGMENT *** OnCreate");
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
+        Utils.log("*** DETAILS FRAGMENT *** OnCreateView");
         View view = inflater.inflate(R.layout.news_details_fragment, container, false);
 
         init(view);
@@ -48,21 +47,12 @@ public class NewsDetailsFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        visibilityController.setVisibleMenuItem(true);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (compositeDisposable != null) {
+    public void onDestroyView() {
+        super.onDestroyView();
+        Utils.log("*** DETAILS FRAGMENT *** OnDestroyView");
+        if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();
         }
-    }
-
-    void registerCallback(Activity activity) {
-        visibilityController = (IMenuVisibilityController) activity;
     }
 
     void deleteFromDB() {

@@ -10,9 +10,10 @@
 
     <item
         android:id="@+id/delete_menu_button"
-        android:title="@string/delete_menu_item_title"
         android:icon="@drawable/ic_baseline_delete_sweep"
-        app:showAsAction="ifRoom"/>
+        android:title="@string/delete_menu_item_title"
+        android:visible="false"
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/about_me_menu_button"

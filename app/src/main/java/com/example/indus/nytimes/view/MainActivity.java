@@ -19,7 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-public class MainActivity extends AppCompatActivity implements INewsClickListener, IMenuVisibilityController {
+public class MainActivity extends AppCompatActivity implements INewsClickListener {
 
     private static final String SELECTED_CATEGORY = "selected_category";
     private static final String CURRENT_FRAGMENT = "current_fragment";
@@ -43,9 +43,11 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
         if (savedInstanceState != null) {
             isDetails = savedInstanceState.getBoolean(CURRENT_FRAGMENT);
             selectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
+
             if (!isDetails) {
-                createFragment(newsListFragment);
+                //createFragment(newsListFragment);
             }
+
             newsListFragment.setCategory(selectedCategory);
         } else {
             createFragment(newsListFragment);
@@ -64,13 +66,8 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
         getMenuInflater().inflate(R.menu.activity_news_menu_list, menu);
         delete_button = menu.findItem(R.id.delete_menu_button);
         createSpinner(menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
         setVisibleMenuItem(isDetails);
-        return super.onPrepareOptionsMenu(menu);
+        return true;
     }
 
     @Override
@@ -99,18 +96,26 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
     private void init() {
         newsListFragment = new NewsListFragment();
         newsDetailsFragment = new NewsDetailsFragment();
-        fragmentManager = getSupportFragmentManager();
         toolbar = findViewById(R.id.toolbar);
         selectedCategory = 0;
 
     }
 
     private void createFragment(Fragment fragment) {
+        Utils.log("*** MAIN ACTIVITY *** CreateFragment");
         isDetails = fragment instanceof NewsDetailsFragment;
-        fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack("ny_times")
-                .commit();
+        setVisibleMenuItem(isDetails);
+        fragmentManager = getSupportFragmentManager();
+        if (isDetails) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack("ny_times")
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+        }
     }
 
     private void closeFragment(Fragment fragment) {
@@ -133,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
     private AdapterView.OnItemSelectedListener changeCategoryListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            Utils.log("*** MAIN ACTIVITY *** OnItemClick");
             selectedCategory = position;
             newsListFragment.setCategory(selectedCategory);
             if (selectedCategory != 0) {
@@ -154,7 +160,6 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
         createFragment(newsDetailsFragment);
     }
 
-    @Override
     public void setVisibleMenuItem(boolean isDetails) {
         if (categorySpinner != null && delete_button != null) {
             categorySpinner.setVisible(!isDetails);
