@@ -15,7 +15,7 @@ import io.reactivex.Single;
 public interface INewsDAO {
 
     @Query("SELECT * FROM newstables")
-    Observable<List<NewsEntity>> getAll();
+    Single<List<NewsEntity>> getAll();
 
     @Query("SELECT * FROM newstables WHERE section LIKE :category")
     Single<List<NewsEntity>> getNewsByCategory(String category);

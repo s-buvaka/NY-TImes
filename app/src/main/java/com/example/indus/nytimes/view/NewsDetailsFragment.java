@@ -8,7 +8,6 @@ import android.webkit.WebView;
 
 import com.example.indus.nytimes.R;
 import com.example.indus.nytimes.database.NewsDatabase;
-import com.example.indus.nytimes.utils.Utils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,13 +30,11 @@ public class NewsDetailsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        Utils.log("*** DETAILS FRAGMENT *** OnCreate");
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Utils.log("*** DETAILS FRAGMENT *** OnCreateView");
         View view = inflater.inflate(R.layout.news_details_fragment, container, false);
 
         init(view);
@@ -49,7 +46,6 @@ public class NewsDetailsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Utils.log("*** DETAILS FRAGMENT *** OnDestroyView");
         if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();
         }

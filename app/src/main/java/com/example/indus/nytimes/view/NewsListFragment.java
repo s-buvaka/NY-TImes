@@ -1,8 +1,11 @@
 package com.example.indus.nytimes.view;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +33,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -37,81 +41,105 @@ import io.reactivex.schedulers.Schedulers;
 public class NewsListFragment extends Fragment {
     private static final int SPAN_COUNT = 2;
     private static final int SPACE_ITEM_DECORATION = 4;
+    private static final String SELECTED_CATEGORY = "selected_category";
+    private static final String CATEGORY_INTENT_ACTION = "com.example.indus.category_intent";
 
     private NewsAdapter newsAdapter;
     private CompositeDisposable compositeDisposable;
-    private INewsEndPoint endPoint;
     private NewsDatabase newsDatabase;
+    private BroadcastReceiver receiver;
     private RecyclerView newsRecycler;
     private ProgressBar progress;
     private View error;
     private int selectedCategory;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Utils.log("*** LIST FRAGMENT *** OnCreate");
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Utils.log("*** LIST FRAGMENT *** OnCreateView");
-
         View view = inflater.inflate(R.layout.news_list_fragment, container, false);
+
         init(view);
+        registerCategoryReceiver();
+
+        if (savedInstanceState != null) {
+            selectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
+        }
         createRecycler();
+
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Utils.log("*** LIST FRAGMENT *** OnStart");
-        if (selectedCategory != 0) {
-            loadItemsFromDbByCategory(Utils.getCategoryById(selectedCategory));
-        } else {
-            loadItemsFromDB();
-        }
+        loadItemsFromDb(selectedCategory);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SELECTED_CATEGORY, selectedCategory);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Utils.log("*** LIST FRAGMENT *** OnDestroy");
+        Objects.requireNonNull(getActivity()).unregisterReceiver(receiver);
         if (compositeDisposable != null && !compositeDisposable.isDisposed()) {
             compositeDisposable.dispose();
         }
     }
 
-    void loadItemsFromDB() {
-        Utils.log("*** LIST FRAGMENT *** Load from DB");
-        if (newsDatabase != null) {
-            compositeDisposable.add(
-                    newsDatabase.getNewsDao().getAll()
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(this::updateItems, this::handleError)
-            );
+    void loadItemsFromDb(int categoryId) {
+        String category = Const.CATEGORY_LIST[categoryId];
+        Single<List<NewsEntity>> newsData;
+
+        if (categoryId == 0) {
+            newsData = newsDatabase.getNewsDao().getAll()
+                    .subscribeOn(Schedulers.io());
+        } else {
+            newsData = newsDatabase.getNewsDao().getNewsByCategory(category)
+                    .subscribeOn(Schedulers.io());
         }
+
+        compositeDisposable.add(
+                newsData.observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::updateItems, this::handleError));
     }
 
-    void loadItemsFromDbByCategory(String category) {
-        Utils.log("*** LIST FRAGMENT *** Load from DB by category");
+    private void loadItemsFromNetwork(int categoryId) {
+        String category = Const.CATEGORY_LIST[categoryId]
+                .toLowerCase().replaceAll("\\s", "");
+        Single<List<NewsEntity>> newsData;
+
+        showProgress();
+        INewsEndPoint endPoint = RestApi.getInstance().getEndPoint();
+
+        if (categoryId == 0) {
+            newsData = endPoint.getNews()
+                    .map(newsResponse -> {
+                        List<NewsEntity> result = NewsTypeConverter.convertToDatabase(newsResponse.getResults());
+                        newsDatabase.getNewsDao().deleteAll();
+                        newsDatabase.getNewsDao().insertAll(result);
+                        return result;
+                    })
+                    .subscribeOn(Schedulers.io());
+        } else {
+            newsData = endPoint.getNewsByCategory(category)
+                    .map(newsResponse -> {
+                        List<NewsEntity> result = NewsTypeConverter.convertToDatabase(newsResponse.getResults());
+                        newsDatabase.getNewsDao().insertAll(result);
+                        return result;
+                    })
+                    .subscribeOn(Schedulers.io());
+        }
         compositeDisposable.add(
-                newsDatabase.getNewsDao().getNewsByCategory(category)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
+                newsData.observeOn(AndroidSchedulers.mainThread())
                         .subscribe(this::updateItems, this::handleError)
         );
     }
 
-    void setCategory(int category) {
-        selectedCategory = category;
-    }
-
     private void init(View view) {
-        Utils.log("*** LIST FRAGMENT ***Init");
         compositeDisposable = new CompositeDisposable();
         newsDatabase = NewsDatabase.getAppDatabase(getActivity());
 
@@ -139,35 +167,6 @@ public class NewsListFragment extends Fragment {
         newsRecycler.setAdapter(newsAdapter);
     }
 
-    private void loadItemsFromNetwork() {
-        showProgress();
-        endPoint = RestApi.getInstance().getEndPoint();
-        compositeDisposable.add(
-                endPoint.getNews()
-                        .map(newsResponse -> {
-                            List<NewsEntity> result = NewsTypeConverter.convertToDatabase(newsResponse.getResults());
-                            newsDatabase.getNewsDao().deleteAll();
-                            newsDatabase.getNewsDao().insertAll(result);
-                            return result;
-                        })
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::updateItems, this::handleError)
-        );
-    }
-
-    private void loadItemsFromNetworkByCategory(String category) {
-        showProgress();
-        endPoint = RestApi.getInstance().getEndPoint();
-        compositeDisposable.add(
-                endPoint.getNewsByCategory(category)
-                        .map(newsResponse -> NewsTypeConverter.convertToDatabase(newsResponse.getResults()))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(this::updateItems, this::handleError)
-        );
-    }
-
     private void updateItems(List<NewsEntity> newsList) {
         if (newsAdapter != null) {
             newsAdapter.replaceItems(newsList);
@@ -184,21 +183,30 @@ public class NewsListFragment extends Fragment {
     }
 
     private void handleError(Throwable th) {
-        Log.e(Const.LOG_TAG, th.getMessage(), th);
+        Utils.log(th.getMessage() + th);
         Utils.setVisible(error, true);
         Utils.setVisible(progress, false);
         Utils.setVisible(newsRecycler, false);
     }
 
-    private View.OnClickListener loadNews = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (selectedCategory == 0) {
-                NewsListFragment.this.loadItemsFromNetwork();
-            } else {
-                NewsListFragment.this.loadItemsFromNetworkByCategory(Const.CATEGORY_LIST[selectedCategory]
-                        .toLowerCase().replaceAll("\\s", ""));
+    private View.OnClickListener loadNews = v -> NewsListFragment.this.loadItemsFromNetwork(selectedCategory);
+
+    private void registerCategoryReceiver() {
+        receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                selectedCategory = intent.getIntExtra(SELECTED_CATEGORY, -1);
+                loadItemsFromDb(selectedCategory);
             }
-        }
-    };
+        };
+        IntentFilter intentFilter = new IntentFilter(CATEGORY_INTENT_ACTION);
+        Objects.requireNonNull(getActivity()).registerReceiver(receiver, intentFilter);
+    }
+
+    static void setCategory(Context context, int category) {
+        Intent intent = new Intent();
+        intent.setAction(CATEGORY_INTENT_ACTION);
+        intent.putExtra(SELECTED_CATEGORY, category);
+        context.sendBroadcast(intent);
+    }
 }

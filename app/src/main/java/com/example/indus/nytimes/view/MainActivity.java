@@ -11,7 +11,8 @@ import android.widget.Spinner;
 
 import com.example.indus.nytimes.R;
 import com.example.indus.nytimes.utils.Const;
-import com.example.indus.nytimes.utils.Utils;
+
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +24,9 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
 
     private static final String SELECTED_CATEGORY = "selected_category";
     private static final String CURRENT_FRAGMENT = "current_fragment";
+    private static final String DETAILS_FRAGMENT_TAG = "details_fragment";
+    private static final String NEWS_LIST_FRAGMENT_TAG = "news_list_fragment";
+    private static final String BACK_STACK_NAME = "ny_times_back_stack";
 
     private NewsListFragment newsListFragment;
     private NewsDetailsFragment newsDetailsFragment;
@@ -37,19 +41,18 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         init();
         setSupportActionBar(toolbar);
+
         if (savedInstanceState != null) {
             isDetails = savedInstanceState.getBoolean(CURRENT_FRAGMENT);
             selectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
+            newsListFragment = (NewsListFragment) fragmentManager.findFragmentByTag(NEWS_LIST_FRAGMENT_TAG);
 
-            if (!isDetails) {
-                //createFragment(newsListFragment);
-            }
-
-            newsListFragment.setCategory(selectedCategory);
+            //NewsListFragment.setCategory(this, selectedCategory);
+            setVisibleMenuItem(isDetails);
         } else {
+            newsListFragment = new NewsListFragment();
             createFragment(newsListFragment);
         }
     }
@@ -78,10 +81,15 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
                 break;
             case android.R.id.home:
                 super.onBackPressed();
+                setVisibleMenuItem(!isDetails);
+                stepBack();
                 break;
             case R.id.delete_menu_button:
-                newsDetailsFragment.deleteFromDB();
-                closeFragment(newsDetailsFragment);
+                newsDetailsFragment = (NewsDetailsFragment) fragmentManager.findFragmentByTag(DETAILS_FRAGMENT_TAG);
+                if (newsDetailsFragment != null) {
+                    newsDetailsFragment.deleteFromDB();
+                    closeFragment(newsDetailsFragment);
+                }
                 break;
         }
         return true;
@@ -90,30 +98,34 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        setVisibleMenuItem(false);
+        stepBack();
+    }
+
+    @Override
+    public void onNewsClick(String url, int id) {
+        NewsDetailsFragment.setArguments(newsDetailsFragment, url, id);
+        createFragment(newsDetailsFragment);
     }
 
     private void init() {
-        newsListFragment = new NewsListFragment();
         newsDetailsFragment = new NewsDetailsFragment();
+        fragmentManager = getSupportFragmentManager();
         toolbar = findViewById(R.id.toolbar);
         selectedCategory = 0;
-
     }
 
     private void createFragment(Fragment fragment) {
-        Utils.log("*** MAIN ACTIVITY *** CreateFragment");
         isDetails = fragment instanceof NewsDetailsFragment;
         setVisibleMenuItem(isDetails);
-        fragmentManager = getSupportFragmentManager();
+
         if (isDetails) {
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack("ny_times")
+                    .replace(R.id.fragment_container, fragment, DETAILS_FRAGMENT_TAG)
+                    .addToBackStack(BACK_STACK_NAME)
                     .commit();
         } else {
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
+                    .replace(R.id.fragment_container, fragment, NEWS_LIST_FRAGMENT_TAG)
                     .commit();
         }
     }
@@ -122,7 +134,10 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
         fragmentManager.beginTransaction()
                 .remove(fragment)
                 .commit();
+        isDetails = false;
+        setVisibleMenuItem(false);
         fragmentManager.popBackStack();
+        NewsListFragment.setCategory(this, selectedCategory);
     }
 
     private void createSpinner(Menu menu) {
@@ -138,32 +153,33 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
     private AdapterView.OnItemSelectedListener changeCategoryListener = new AdapterView.OnItemSelectedListener() {
         @Override
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            Utils.log("*** MAIN ACTIVITY *** OnItemClick");
+            newsListFragment = (NewsListFragment) fragmentManager.findFragmentByTag(NEWS_LIST_FRAGMENT_TAG);
             selectedCategory = position;
-            newsListFragment.setCategory(selectedCategory);
-            if (selectedCategory != 0) {
-                newsListFragment.loadItemsFromDbByCategory(Utils.getCategoryById(position));
-            } else {
-                newsListFragment.loadItemsFromDB();
-            }
+            NewsListFragment.setCategory(view.getContext(), position);
+            //newsListFragment.loadItemsFromDb(position);
         }
 
         @Override
         public void onNothingSelected(AdapterView<?> parent) {
-
         }
     };
 
-    @Override
-    public void onNewsClick(String url, int id) {
-        NewsDetailsFragment.setArguments(newsDetailsFragment, url, id);
-        createFragment(newsDetailsFragment);
+    private void setVisibleMenuItem(boolean isVisible) {
+        if (categorySpinner != null && delete_button != null) {
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(isVisible);
+            categorySpinner.setVisible(!isVisible);
+            delete_button.setVisible(isVisible);
+        }
     }
 
-    public void setVisibleMenuItem(boolean isDetails) {
-        if (categorySpinner != null && delete_button != null) {
-            categorySpinner.setVisible(!isDetails);
-            delete_button.setVisible(isDetails);
+    private void stepBack() {
+        setVisibleMenuItem(!isDetails);
+        if (isDetails) {
+            isDetails = false;
+            newsListFragment = (NewsListFragment) fragmentManager.findFragmentByTag(NEWS_LIST_FRAGMENT_TAG);
+            if (newsListFragment != null) {
+                newsListFragment.loadItemsFromDb(selectedCategory);
+            }
         }
     }
 }
