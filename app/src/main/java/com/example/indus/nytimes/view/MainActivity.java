@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
             selectedCategory = savedInstanceState.getInt(SELECTED_CATEGORY);
             newsListFragment = (NewsListFragment) fragmentManager.findFragmentByTag(NEWS_LIST_FRAGMENT_TAG);
 
-            //NewsListFragment.setCategory(this, selectedCategory);
             setVisibleMenuItem(isDetails);
         } else {
             newsListFragment = new NewsListFragment();
@@ -156,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements INewsClickListene
             newsListFragment = (NewsListFragment) fragmentManager.findFragmentByTag(NEWS_LIST_FRAGMENT_TAG);
             selectedCategory = position;
             NewsListFragment.setCategory(view.getContext(), position);
-            //newsListFragment.loadItemsFromDb(position);
         }
 
         @Override
