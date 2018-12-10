@@ -23,7 +23,8 @@ android {
 }
 
 dependencies {
-    compile 'com.arello-mobile:moxy:1.5.5'
+    implementation 'com.arello-mobile:moxy-app-compat:1.5.5'
+    implementation 'com.arello-mobile:moxy-android:1.5.5'
     annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.5'
     implementation 'me.relex:circleindicator:2.1.0'
     implementation fileTree(dir: 'libs', include: ['*.jar'])

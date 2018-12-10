@@ -1,4 +1,4 @@
-package com.example.indus.nytimes.view;
+package com.example.indus.nytimes.ui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

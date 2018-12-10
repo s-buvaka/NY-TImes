@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.indus.nytimes.view.IntroActivity">
+    tools:context="com.example.indus.nytimes.ui.IntroActivity">
 
     <ImageView
         android:id="@+id/image_container"

@@ -12,7 +12,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.indus.nytimes.R;
 import com.example.indus.nytimes.modeldto.NewsEntity;
 import com.example.indus.nytimes.utils.Const;
-import com.example.indus.nytimes.view.INewsClickListener;
+import com.example.indus.nytimes.ui.INewsClickListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

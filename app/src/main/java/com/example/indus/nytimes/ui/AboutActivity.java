@@ -1,34 +1,79 @@
-package com.example.indus.nytimes.view;
+package com.example.indus.nytimes.ui;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.arellomobile.mvp.MvpDelegate;
+import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.example.indus.nytimes.R;
+import com.example.indus.nytimes.mvp.AboutPresenter;
+import com.example.indus.nytimes.mvp.AboutView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private static final String MY_MAIL = "buvaka.sergey89@gmail.com";
-    private static final String MY_WEB = "https://github.com/industradamus";
-    private static final String MY_NUMBER = "+79689613600";
+public class AboutActivity extends AppCompatActivity implements View.OnClickListener, AboutView {
+    private MvpDelegate<AboutActivity> mMvpDelegate;
 
     private RelativeLayout phoneLayout, mailLayout, webLayout;
+
+    @InjectPresenter
+    AboutPresenter aboutPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
+        getMvpDelegate().onCreate(savedInstanceState);
+
         initView();
         setClickListeners();
         createToolbar();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        getMvpDelegate().onAttach();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        getMvpDelegate().onAttach();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getMvpDelegate().onSaveInstanceState(outState);
+        getMvpDelegate().onDetach();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        getMvpDelegate().onDetach();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        getMvpDelegate().onDestroyView();
+
+        if (isFinishing()) {
+            getMvpDelegate().onDestroy();
+        }
     }
 
     @Override
@@ -46,15 +91,15 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
 
             case R.id.phone_layout:
-                callMe();
+                aboutPresenter.callMe(this);
                 break;
 
             case R.id.mail_layout:
-                sendEmail();
+                aboutPresenter.sendEmail(this);
                 break;
 
             case R.id.web_layout:
-                openResume();
+                aboutPresenter.openResume(this);
                 break;
         }
     }
@@ -83,23 +128,25 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void callMe() {
-        String uriTel = "tel:" + MY_NUMBER;
-        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse(uriTel));
-        startActivity(intent);
+    @Override
+    public void callPhone(@NonNull String number) {
+
     }
 
-    private void openResume() {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(MY_WEB));
-        startActivity(intent);
+    @Override
+    public void sendMail(@NonNull String email) {
+
     }
 
-    private void sendEmail() {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:"));
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{MY_MAIL});
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(Intent.createChooser(intent, "Send Email"));
+    @Override
+    public void openWeb(@NonNull String link) {
+
+    }
+
+    public MvpDelegate<AboutActivity> getMvpDelegate() {
+        if (mMvpDelegate == null) {
+            mMvpDelegate = new MvpDelegate<>(this);
         }
+        return mMvpDelegate;
     }
 }
